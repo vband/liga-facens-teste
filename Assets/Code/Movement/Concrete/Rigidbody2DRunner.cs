@@ -18,7 +18,7 @@ namespace Code.Movement.Concrete
 
         public void UpdateMovement(float axis)
         {
-            var horizontalVelocity = axis * _speed * Time.deltaTime;
+            var horizontalVelocity = axis * _speed;
             _rigidbody2D.velocity = new Vector2(horizontalVelocity, _rigidbody2D.velocity.y);
         }
     }
