@@ -28,15 +28,22 @@ namespace Code.Behaviours.Concrete
             _waitForEndOfFrame = new WaitForEndOfFrame();
         }
 
-        public void UpdateJump(bool jumping)
+        public void UpdateJump(bool jumping, bool isGrounded)
         {
-            if (!_isJumping && jumping && _jumpCoroutine == null)
+            if (ShouldStartJump(jumping, isGrounded))
                 StartJumpCoroutine();
-            if (!jumping && _jumpCoroutine != null)
+            
+            if (ShouldCancelJump(jumping))
                 StopJumpCoroutine();
 
             _isJumping = jumping;
         }
+
+        private bool ShouldStartJump(bool jumping, bool isGrounded)
+            => !_isJumping && jumping && isGrounded && _jumpCoroutine == null;
+
+        private bool ShouldCancelJump(bool jumping)
+            => !jumping && _jumpCoroutine != null;
 
         private IEnumerator JumpCoroutine()
         {
