@@ -1,26 +1,17 @@
-﻿using Code.ActorControllers.Abstraction;
-using Code.ActorControllers.Concrete;
+﻿using Code.ActorControllers.Concrete;
 
 namespace Code.Actors.Concrete
 {
-    public class PlayerActor : JumperActor
+    public class PlayerActor : RunnerJumperActor
     {
-        private IRunnerJumperActorController _controller;
-        
         protected override void BindController()
         {
-            _controller = new InputActorController();
+            _controller = new InputActorController(this);
             _controller.SetEnabled(true);
-            
-            _controller.OnRunAction += UpdateMovement;
-            _controller.OnJumpAction += UpdateJump;
         }
 
         protected override void DisposeController()
         {
-            _controller.OnRunAction -= UpdateMovement;
-            _controller.OnJumpAction -= UpdateJump;
-
             _controller.SetEnabled(false);
             _controller.Dispose();
             _controller = null;

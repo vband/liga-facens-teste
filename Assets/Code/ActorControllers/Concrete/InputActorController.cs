@@ -1,18 +1,17 @@
-using System;
 using Code.ActorControllers.Abstraction;
+using Code.Actors.Abstraction;
 using UnityEngine.InputSystem;
 
 namespace Code.ActorControllers.Concrete
 {
-    public class InputActorController : IRunnerJumperActorController
+    public class InputActorController : IActorController
     {
-        public event Action<float> OnRunAction;
-        public event Action<bool> OnJumpAction;
-
         private readonly PlayerInputActions _playerInputActions;
+        private readonly IRunnerJumperActor _actor;
 
-        public InputActorController()
+        public InputActorController(IRunnerJumperActor actor)
         {
+            _actor = actor;
             _playerInputActions = new PlayerInputActions();
 
             _playerInputActions.Player.Move.performed += OnMovePerformed;
@@ -30,16 +29,16 @@ namespace Code.ActorControllers.Concrete
         }
 
         private void OnMovePerformed(InputAction.CallbackContext context)
-            => OnRunAction?.Invoke(context.ReadValue<float>());
+            => _actor.UpdateMovement(context.ReadValue<float>());
 
         private void OnMoveCanceled(InputAction.CallbackContext context)
-            => OnRunAction?.Invoke(0);
+            => _actor.UpdateMovement(0);
 
         private void OnJumpPerformed(InputAction.CallbackContext context)
-            => OnJumpAction?.Invoke(true);
+            => _actor.UpdateJump(true);
 
         private void OnJumpCanceled(InputAction.CallbackContext context)
-            => OnJumpAction?.Invoke(false);
+            => _actor.UpdateJump(false);
 
         public void Dispose()
             => _playerInputActions?.Dispose();

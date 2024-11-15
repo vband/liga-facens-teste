@@ -2,6 +2,6 @@
 {
     public interface IJumperActor : IActor
     {
-        
+        void UpdateJump(bool jumping);
     }
 }
