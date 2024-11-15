@@ -1,10 +1,10 @@
 using System.Collections;
-using Code.Movement.Abstraction;
+using Code.Behaviours.Abstraction;
 using UnityEngine;
 
-namespace Code.Movement.Concrete
+namespace Code.Behaviours.Concrete
 {
-    public class Rigidbody2DJumper : IJumper
+    public class Rigidbody2DJumpBehaviour : IJumpBehaviour
     {
         public float VerticalVelocity => _rigidbody2D.velocity.y;
 
@@ -18,7 +18,7 @@ namespace Code.Movement.Concrete
         private float _jumpStartTime;
         private Coroutine _jumpCoroutine;
 
-        public Rigidbody2DJumper(Rigidbody2D rigidbody2D, MonoBehaviour coroutineStarter, float jumpVelocity,
+        public Rigidbody2DJumpBehaviour(Rigidbody2D rigidbody2D, MonoBehaviour coroutineStarter, float jumpVelocity,
             float jumpMaxDuration)
         {
             _rigidbody2D = rigidbody2D;

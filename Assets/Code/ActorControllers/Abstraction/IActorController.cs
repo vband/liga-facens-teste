@@ -2,10 +2,8 @@ using System;
 
 namespace Code.ActorControllers.Abstraction
 {
-    public interface IActorController
+    public interface IActorController : IDisposable
     {
-        event Action<float> OnMoveAction;
-        event Action<bool> OnJumpAction;
         void SetEnabled(bool enabled);
     }
 }

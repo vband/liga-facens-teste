@@ -1,6 +1,6 @@
-namespace Code.Movement.Abstraction
+namespace Code.Behaviours.Abstraction
 {
-    public interface IJumper
+    public interface IJumpBehaviour
     {
         float VerticalVelocity { get; }
         void UpdateJump(bool jumping);

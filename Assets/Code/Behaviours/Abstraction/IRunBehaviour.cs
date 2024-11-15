@@ -1,6 +1,6 @@
-namespace Code.Movement.Abstraction
+namespace Code.Behaviours.Abstraction
 {
-    public interface IRunner
+    public interface IRunBehaviour
     {
         float HorizontalVelocity { get; }
         void UpdateMovement(float axis);
