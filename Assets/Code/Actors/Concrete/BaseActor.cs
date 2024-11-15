@@ -1,11 +1,12 @@
 ﻿using Code.ActorControllers.Abstraction;
+using Code.Actors.Abstraction;
 using Code.Movement.Abstraction;
 using Code.Movement.Concrete;
 using UnityEngine;
 
-namespace Code.Actors.Abstraction
+namespace Code.Actors.Concrete
 {
-    public abstract class BaseActor : MonoBehaviour
+    public abstract class BaseActor : MonoBehaviour, IActor
     {
         [Tooltip("References")]
         [SerializeField] private Rigidbody2D _rigidbody2D;
