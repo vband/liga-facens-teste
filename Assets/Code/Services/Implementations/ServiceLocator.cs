@@ -34,7 +34,10 @@ namespace Code.Services.Implementations
 
         private static void InstallServices()
         {
-            
+            InstallPlayerInputControllerService();
         }
+
+        private static void InstallPlayerInputControllerService()
+            => Register(() => new PlayerInputControllerService());
     }
 }
