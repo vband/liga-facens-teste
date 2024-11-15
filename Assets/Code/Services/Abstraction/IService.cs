@@ -1,4 +1,4 @@
-﻿namespace Code.Services.Base
+﻿namespace Code.Services.Abstraction
 {
     public interface IService
     {

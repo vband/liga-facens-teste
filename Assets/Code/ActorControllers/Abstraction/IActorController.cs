@@ -1,8 +1,8 @@
 using System;
 
-namespace Code.Input.Base
+namespace Code.ActorControllers.Abstraction
 {
-    public interface IPlayerInputController
+    public interface IActorController
     {
         event Action<float> OnMoveAction;
         event Action<bool> OnJumpAction;

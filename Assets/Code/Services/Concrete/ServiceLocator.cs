@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Code.Services.Base;
+using Code.Services.Abstraction;
 using Code.Utils;
 
-namespace Code.Services.Implementations
+namespace Code.Services.Concrete
 {
     public class ServiceLocator : MonoBehaviourSingleton<ServiceLocator>
     {
@@ -34,10 +34,10 @@ namespace Code.Services.Implementations
 
         private static void InstallServices()
         {
-            InstallPlayerInputControllerService();
+            InstallInputSystemActorControllerService();
         }
 
-        private static void InstallPlayerInputControllerService()
-            => Register(() => new PlayerInputControllerService());
+        private static void InstallInputSystemActorControllerService()
+            => Register(() => new InputSystemActorControllerService());
     }
 }

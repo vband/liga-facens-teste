@@ -1,17 +1,17 @@
 using System;
-using Code.Input.Base;
+using Code.ActorControllers.Abstraction;
 using UnityEngine.InputSystem;
 
-namespace Code.Input.Implementations
+namespace Code.ActorControllers.Concrete
 {
-    public class InputSystemController : IPlayerInputController
+    public class InputSystemActorController : IActorController
     {
         public event Action<float> OnMoveAction;
         public event Action<bool> OnJumpAction;
 
         private readonly PlayerInputActions _playerInputActions;
 
-        public InputSystemController()
+        public InputSystemActorController()
         {
             _playerInputActions = new PlayerInputActions();
 
