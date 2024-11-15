@@ -1,3 +1,4 @@
+using System.Collections;
 using Code.Movement.Abstraction;
 using UnityEngine;
 
@@ -8,42 +9,55 @@ namespace Code.Movement.Concrete
         public float VerticalVelocity => _rigidbody2D.velocity.y;
 
         private readonly Rigidbody2D _rigidbody2D;
-        private readonly AnimationCurve _jumpVelocityCurve;
-        private readonly float _jumpMaxVelocity;
+        private readonly MonoBehaviour _coroutineStarter;
+        private readonly float _jumpVelocity;
         private readonly float _jumpMaxDuration;
+        private readonly WaitForEndOfFrame _waitForEndOfFrame;
 
         private bool _isJumping;
         private float _jumpStartTime;
+        private Coroutine _jumpCoroutine;
 
-        public Rigidbody2DJumper(Rigidbody2D rigidbody2D, AnimationCurve jumpVelocityCurve, float jumpMaxVelocity,
+        public Rigidbody2DJumper(Rigidbody2D rigidbody2D, MonoBehaviour coroutineStarter, float jumpVelocity,
             float jumpMaxDuration)
         {
             _rigidbody2D = rigidbody2D;
-            _jumpVelocityCurve = jumpVelocityCurve;
-            _jumpMaxVelocity = jumpMaxVelocity;
+            _coroutineStarter = coroutineStarter;
+            _jumpVelocity = jumpVelocity;
             _jumpMaxDuration = jumpMaxDuration;
+            _waitForEndOfFrame = new WaitForEndOfFrame();
         }
 
         public void UpdateJump(bool jumping)
         {
-            float verticalVelocity;
-            
-            if (!_isJumping && jumping)
-                _jumpStartTime = Time.time;
-
-            if (!jumping)
-                verticalVelocity = 0;
-            else
-            {
-                var jumpCurrentTime = Time.time - _jumpStartTime;
-                var jumpCurrentTimeNormalized = Mathf.Clamp01(_jumpMaxDuration / jumpCurrentTime);
-                verticalVelocity = _jumpVelocityCurve.Evaluate(jumpCurrentTimeNormalized) * _jumpMaxVelocity;
-            }
-
-            verticalVelocity = Mathf.Min(verticalVelocity, _rigidbody2D.velocity.y);
-            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, verticalVelocity);
+            if (!_isJumping && jumping && _jumpCoroutine == null)
+                StartJumpCoroutine();
+            if (!jumping && _jumpCoroutine != null)
+                StopJumpCoroutine();
 
             _isJumping = jumping;
+        }
+
+        private IEnumerator JumpCoroutine()
+        {
+            _jumpStartTime = Time.time;
+
+            while (Time.time - _jumpStartTime < _jumpMaxDuration)
+            {
+                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpVelocity);
+                yield return _waitForEndOfFrame;
+            }
+            
+            StopJumpCoroutine();
+        }
+
+        private void StartJumpCoroutine()
+            => _jumpCoroutine = _coroutineStarter.StartCoroutine(JumpCoroutine());
+
+        private void StopJumpCoroutine()
+        {
+            _coroutineStarter.StopCoroutine(_jumpCoroutine);
+            _jumpCoroutine = null;
         }
     }
 }

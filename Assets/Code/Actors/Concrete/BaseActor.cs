@@ -13,8 +13,7 @@ namespace Code.Actors.Concrete
 
         [Tooltip("Parameters")]
         [SerializeField] private float _horizontalSpeed;
-        [SerializeField] private AnimationCurve _jumpVelocityCurve;
-        [SerializeField] private float _jumpMaxVelocity;
+        [SerializeField] private float _jumpVelocity;
         [SerializeField] private float _jumpMaxDuration;
         
         private IActorController _controller;
@@ -28,7 +27,7 @@ namespace Code.Actors.Concrete
             _controller = GetController();
 
             _runner = new Rigidbody2DRunner(_rigidbody2D, _horizontalSpeed);
-            _jumper = new Rigidbody2DJumper(_rigidbody2D, _jumpVelocityCurve, _jumpMaxVelocity, _jumpMaxDuration);
+            _jumper = new Rigidbody2DJumper(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
             
             _controller.OnMoveAction += OnMove;
             _controller.OnJumpAction += OnJump;
