@@ -38,6 +38,6 @@ namespace Code.Services.Concrete
         }
 
         private static void InstallInputSystemActorControllerService()
-            => Register(() => new InputSystemActorControllerService());
+            => Register<IInputSystemActorControllerService>(() => new InputSystemActorControllerService());
     }
 }
