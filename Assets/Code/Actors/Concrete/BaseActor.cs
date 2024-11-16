@@ -31,8 +31,8 @@ namespace Code.Actors.Concrete
 
         private void DisposeController()
         {
-            _controller.SetEnabled(false);
-            _controller.Dispose();
+            _controller?.SetEnabled(false);
+            _controller?.Dispose();
             _controller = null;
         }
     }
