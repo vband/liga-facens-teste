@@ -1,4 +1,6 @@
 ﻿using Code.ActorControllers.Concrete;
+using Code.Services.Abstraction;
+using Code.Services.ServiceLocator;
 
 namespace Code.Actors.Concrete
 {
@@ -6,7 +8,8 @@ namespace Code.Actors.Concrete
     {
         protected override void BindController()
         {
-            _controller = new InputActorController(this);
+            var tickService = ServiceLocator.Get<ITickService>();
+            _controller = new InputActorController(this, tickService);
             _controller.SetEnabled(true);
         }
 
