@@ -1,6 +1,6 @@
 ﻿namespace Code.Behaviours.Abstraction
 {
-    public interface IBounceableBehaviour
+    public interface IBounceableBehaviour : IBehaviour
     {
         void UpdateBounce(float verticalVelocity);
     }
