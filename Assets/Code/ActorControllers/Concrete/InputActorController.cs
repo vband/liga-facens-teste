@@ -32,7 +32,11 @@ namespace Code.ActorControllers.Concrete
             if (enabled)
                 _playerInputActions.Enable();
             else
+            {
+                _actor.UpdateMovement(0);
+                _actor.UpdateJump(false);
                 _playerInputActions.Disable();
+            }
         }
 
         private void OnMovePerformed(InputAction.CallbackContext context)
