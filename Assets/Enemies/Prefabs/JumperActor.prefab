@@ -196,6 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody2D: {fileID: 5515116993150340383}
   _animator: {fileID: 670803799687004679}
+  _groundTriggerObserver: {fileID: 8895061280346974324}
   _jumpVelocity: 7.5
   _jumpMaxDuration: 0.25
   _jumpTimeInterval: 3
@@ -210,7 +211,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5445981790915963913}
   - component: {fileID: 1593493901976366397}
-  m_Layer: 6
+  - component: {fileID: 8895061280346974324}
+  m_Layer: 9
   m_Name: GoundCheckTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,3 +279,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.05}
   m_EdgeRadius: 0
+--- !u!114 &8895061280346974324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6960398606114764964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd55eba772e4b288346d67a6ce8f1df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -6,6 +6,7 @@ using Code.Behaviours.Visuals.Abstraction;
 using Code.Behaviours.Visuals.Concrete;
 using Code.Services.Abstraction;
 using Code.Services.ServiceLocator;
+using Code.Utils;
 using UnityEngine;
 
 namespace Code.Actors.Concrete
@@ -16,6 +17,7 @@ namespace Code.Actors.Concrete
 
         [SerializeField] protected Animator _animator;
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private CollisionObserver _groundTriggerObserver;
         [SerializeField] private float _horizontalSpeed;
         [SerializeField] private float _jumpVelocity;
         [SerializeField] private float _jumpMaxDuration;
@@ -37,6 +39,9 @@ namespace Code.Actors.Concrete
             _jumpBehaviour = new JumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
             _groundCheckBehaviour = new GroundCheckBehaviour();
             _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, tickService);
+
+            _groundTriggerObserver.OnTriggerEnter += OnGroundTriggerEnter;
+            _groundTriggerObserver.OnTriggerExit += OnGroundTriggerExit;
         }
 
         protected override void BindController()
@@ -56,16 +61,19 @@ namespace Code.Actors.Concrete
         public void UpdateJump(bool jumping)
             => _jumpBehaviour.UpdateJump(jumping, _groundCheckBehaviour.IsGrounded);
 
-        private void OnTriggerEnter2D(Collider2D other)
-            => _groundCheckBehaviour.OnNewContact(other.gameObject);
+        private void OnGroundTriggerEnter(GameObject go)
+            => _groundCheckBehaviour.OnNewContact(go);
 
-        private void OnTriggerExit2D(Collider2D other)
-            => _groundCheckBehaviour.OnLoseContact(other.gameObject);
+        private void OnGroundTriggerExit(GameObject go)
+            => _groundCheckBehaviour.OnLoseContact(go);
 
         protected override void DisposeBehaviours()
         {
             _runBehaviourVisual.Dispose();
             _jumpBehaviourVisual.Dispose();
+            
+            _groundTriggerObserver.OnTriggerEnter -= OnGroundTriggerEnter;
+            _groundTriggerObserver.OnTriggerExit -= OnGroundTriggerExit;
         }
     }
 }
