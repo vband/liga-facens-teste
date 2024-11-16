@@ -12,7 +12,6 @@ namespace Code.Actors.Concrete
     public abstract class RunnerActor : Rigidbody2DActor, IRunnerActor
     {
         public float HorizontalPos => transform.position.x;
-        public float HorizontalSpeed => _horizontalSpeed;
 
         [SerializeField] protected Animator _animator;
         [SerializeField] private SpriteRenderer _spriteRenderer;
@@ -31,7 +30,10 @@ namespace Code.Actors.Concrete
 
         public void UpdateMovement(float axis)
             => _runBehaviour.UpdateMovement(axis);
-        
+
+        public void SnapHorizontalPos(float targetHorizontalPos)
+            => transform.position = new Vector3(targetHorizontalPos, transform.position.y, transform.position.z);
+
         protected override void DisposeBehaviours()
         {
             _runBehaviourVisual.Dispose();

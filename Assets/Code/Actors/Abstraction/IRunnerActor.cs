@@ -3,7 +3,7 @@
     public interface IRunnerActor : IActor
     {
         float HorizontalPos { get; }
-        float HorizontalSpeed { get; }
         void UpdateMovement(float axis);
+        void SnapHorizontalPos(float targetHorizontalPos);
     }
 }

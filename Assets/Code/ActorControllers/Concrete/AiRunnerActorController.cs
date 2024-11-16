@@ -7,6 +7,8 @@ namespace Code.ActorControllers.Concrete
 {
     public class AiRunnerActorController : IActorController
     {
+        private const float Epsilon = 0.1f;
+        
         private readonly IRunnerActor _actor;
         private readonly ITickService _tickService;
         private readonly float _movementWidth;
@@ -35,14 +37,24 @@ namespace Code.ActorControllers.Concrete
                 _movementBounds = CalculateBounds();
 
             if (HasReachedBoundsLimit())
+            {
+                SnapPositionInsideBounds();
                 _currentMovementDirection *= -1;
+            }
             
             _actor.UpdateMovement(_currentMovementDirection);
         }
 
         private bool HasReachedBoundsLimit()
-            => _actor.HorizontalPos - _actor.HorizontalSpeed * Time.deltaTime <= _movementBounds.min.x
-               || _actor.HorizontalPos + _actor.HorizontalSpeed * Time.deltaTime >= _movementBounds.max.x;
+            => _actor.HorizontalPos  <= _movementBounds.min.x || _actor.HorizontalPos >= _movementBounds.max.x;
+
+        private void SnapPositionInsideBounds()
+        {
+            if (_actor.HorizontalPos > _movementBounds.center.x)
+                _actor.SnapHorizontalPos(_movementBounds.max.x - Epsilon);
+            else
+                _actor.SnapHorizontalPos(_movementBounds.min.x + Epsilon);
+        }
 
         private Bounds CalculateBounds()
         {
