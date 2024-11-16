@@ -9,8 +9,9 @@ using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public abstract class RunnerJumperActor : RunnerActor, IRunnerJumperActor
+    public abstract class JumperActor : Rigidbody2DActor, IJumperActor
     {
+        [SerializeField] protected Animator _animator;
         [SerializeField] private float _jumpVelocity;
         [SerializeField] private float _jumpMaxDuration;
         
@@ -20,15 +21,13 @@ namespace Code.Actors.Concrete
         
         protected override void InitBehaviours()
         {
-            base.InitBehaviours();
-            
             var tickService = ServiceLocator.Get<ITickService>();
             
             _jumpBehaviour = new Rigidbody2DJumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
             _groundCheckBehaviour = new GroundCheckBehaviour();
             _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, tickService);
         }
-
+        
         public void UpdateJump(bool jumping)
             => _jumpBehaviour.UpdateJump(jumping, _groundCheckBehaviour.IsGrounded);
 
@@ -40,7 +39,6 @@ namespace Code.Actors.Concrete
 
         protected override void DisposeBehaviours()
         {
-            base.DisposeBehaviours();
             _jumpBehaviourVisual.Dispose();
         }
     }
