@@ -1,20 +1,25 @@
 ﻿using Code.Actors.Abstraction;
 using Code.Behaviours.Abstraction;
 using Code.Behaviours.Concrete;
+using Code.Behaviours.Visuals.Abstraction;
+using Code.Behaviours.Visuals.Concrete;
 using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
     public class ImmobileBouncerActor : BaseActor
     {
+        [SerializeField] private Animator _animator;
         [SerializeField] private float _bounceVerticalVelocity;
         [SerializeField] private float _bounceDuration;
         
-        private IBouncerBehaviour _bouncerBehaviour;
+        private IBounceBehaviour _bounceBehaviour;
+        private IBounceBehaviourVisual _bounceBehaviourVisual;
         
         protected override void InitBehaviours()
         {
-            _bouncerBehaviour = new BounceBehaviour(_bounceVerticalVelocity, _bounceDuration, this);
+            _bounceBehaviour = new BounceBehaviour(_bounceVerticalVelocity, _bounceDuration, this);
+            _bounceBehaviourVisual = new BounceBehaviourVisual(_animator, _bounceBehaviour);
         }
 
         private void OnCollisionEnter2D(Collision2D other)
@@ -24,12 +29,12 @@ namespace Code.Actors.Concrete
             if (bounceableActor == null)
                 return;
             
-            _bouncerBehaviour.Bounce(bounceableActor.BounceableBehaviour);
+            _bounceBehaviour.Bounce(bounceableActor.BounceableBehaviour);
         }
 
         protected override void DisposeBehaviours()
         {
-            // TODO: Dispose bounceBehaviourVisual
+            _bounceBehaviourVisual.Dispose();
         }
     }
 }

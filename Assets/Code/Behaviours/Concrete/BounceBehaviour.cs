@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Code.Behaviours.Concrete
 {
-    public class BounceBehaviour : IBouncerBehaviour
+    public class BounceBehaviour : IBounceBehaviour
     {
         public event Action OnBounce;
 
