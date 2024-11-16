@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Code.Behaviours.Concrete
 {
-    public class Rigidbody2DJumpBehaviour : IJumpBehaviour
+    public class JumpBehaviour : IJumpBehaviour
     {
         public float VerticalVelocity => _rigidbody2D.velocity.y;
 
@@ -18,7 +18,7 @@ namespace Code.Behaviours.Concrete
         private float _jumpStartTime;
         private Coroutine _jumpCoroutine;
 
-        public Rigidbody2DJumpBehaviour(Rigidbody2D rigidbody2D, MonoBehaviour coroutineStarter, float jumpVelocity,
+        public JumpBehaviour(Rigidbody2D rigidbody2D, MonoBehaviour coroutineStarter, float jumpVelocity,
             float jumpMaxDuration)
         {
             _rigidbody2D = rigidbody2D;

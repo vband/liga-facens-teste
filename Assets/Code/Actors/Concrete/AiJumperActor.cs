@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class AiJumperActor : Rigidbody2DActor, IJumperActor
+    public class AiJumperActor : BounceableActor, IJumperActor
     {
         [SerializeField] protected Animator _animator;
         [SerializeField] private float _jumpVelocity;
@@ -24,9 +24,11 @@ namespace Code.Actors.Concrete
         
         protected override void InitBehaviours()
         {
+            base.InitBehaviours();
+            
             var tickService = ServiceLocator.Get<ITickService>();
             
-            _jumpBehaviour = new Rigidbody2DJumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
+            _jumpBehaviour = new JumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
             _groundCheckBehaviour = new GroundCheckBehaviour();
             _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, tickService);
         }

@@ -1,9 +1,8 @@
-﻿using Code.Actors.Abstraction;
-using Code.Behaviours.Concrete;
+﻿using Code.Behaviours.Concrete;
 
-namespace Code.Actors.Concrete
+namespace Code.Actors.Abstraction
 {
-    public abstract class BounceableActor : Rigidbody2DActor, IBounceableActor
+    public abstract class BounceableActor : ControllableActor
     {
         public BounceableBehaviour BounceableBehaviour { get; private set; }
 

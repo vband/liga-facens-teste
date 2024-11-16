@@ -1,4 +1,5 @@
-﻿using Code.Behaviours.Abstraction;
+﻿using Code.Actors.Abstraction;
+using Code.Behaviours.Abstraction;
 using Code.Behaviours.Concrete;
 using UnityEngine;
 
@@ -29,12 +30,6 @@ namespace Code.Actors.Concrete
         protected override void DisposeBehaviours()
         {
             // TODO: Dispose bounceBehaviourVisual
-        }
-
-        protected override void BindController()
-        {
-            // This actor is immobile, so it has no controllers
-            // Do nothing
         }
     }
 }

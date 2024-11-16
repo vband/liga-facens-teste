@@ -32,9 +32,9 @@ namespace Code.Actors.Concrete
             
             var tickService = ServiceLocator.Get<ITickService>();
             
-            _runBehaviour = new Rigidbody2DRunBehaviour(_rigidbody2D, _horizontalSpeed);
+            _runBehaviour = new RunBehaviour(_rigidbody2D, _horizontalSpeed);
             _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, tickService);
-            _jumpBehaviour = new Rigidbody2DJumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
+            _jumpBehaviour = new JumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
             _groundCheckBehaviour = new GroundCheckBehaviour();
             _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, tickService);
         }

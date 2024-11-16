@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class AiRunnerActor : Rigidbody2DActor, IRunnerActor
+    public class AiRunnerActor : BounceableActor, IRunnerActor
     {
         public float HorizontalPos => transform.position.x;
         
@@ -24,9 +24,11 @@ namespace Code.Actors.Concrete
         
         protected override void InitBehaviours()
         {
+            base.InitBehaviours();
+            
             var tickService = ServiceLocator.Get<ITickService>();
             
-            _runBehaviour = new Rigidbody2DRunBehaviour(_rigidbody2D, _horizontalSpeed);
+            _runBehaviour = new RunBehaviour(_rigidbody2D, _horizontalSpeed);
             _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, tickService);
         }
         
