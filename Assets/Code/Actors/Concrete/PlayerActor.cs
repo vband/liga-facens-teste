@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class PlayerActor : BounceableActor, IRunnerJumperActor
+    public class PlayerActor : KillableActor, IRunnerJumperActor
     {
         public float HorizontalPos => transform.position.x;
 
