@@ -11,14 +11,14 @@ TagManager:
   - 
   - Water
   - UI
-  - Player
-  - Ground
-  - World
-  - 
-  - 
-  - 
-  - 
-  - 
+  - ActorCollider
+  - GroundCollider
+  - WorldCollider
+  - GroundCheckTrigger
+  - BouncerCollider
+  - BounceableTrigger
+  - KillerCollider
+  - KillableTrigger
   - 
   - 
   - 

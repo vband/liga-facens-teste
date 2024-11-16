@@ -3,6 +3,7 @@ using Code.Behaviours.Abstraction;
 using Code.Behaviours.Concrete;
 using Code.Behaviours.Visuals.Abstraction;
 using Code.Behaviours.Visuals.Concrete;
+using Code.Utils;
 using UnityEngine;
 
 namespace Code.Actors.Concrete
@@ -10,6 +11,7 @@ namespace Code.Actors.Concrete
     public class ImmobileBouncerActor : BaseActor
     {
         [SerializeField] private Animator _animator;
+        [SerializeField] private CollisionObserver _bounceTriggerObserver;
         [SerializeField] private float _bounceVerticalVelocity;
         [SerializeField] private float _bounceDuration;
         
@@ -20,11 +22,13 @@ namespace Code.Actors.Concrete
         {
             _bounceBehaviour = new BounceBehaviour(_bounceVerticalVelocity, _bounceDuration, this);
             _bounceBehaviourVisual = new BounceBehaviourVisual(_animator, _bounceBehaviour);
+
+            _bounceTriggerObserver.OnTriggerEnter += OnBounceTriggerEnter;
         }
 
-        private void OnCollisionEnter2D(Collision2D other)
+        private void OnBounceTriggerEnter(GameObject go)
         {
-            var bounceableActor = other.gameObject.GetComponent<BounceableActor>();
+            var bounceableActor = go.GetComponentInParent<BounceableActor>();
             
             if (bounceableActor == null)
                 return;
@@ -35,6 +39,8 @@ namespace Code.Actors.Concrete
         protected override void DisposeBehaviours()
         {
             _bounceBehaviourVisual.Dispose();
+            
+            _bounceTriggerObserver.OnTriggerEnter -= OnBounceTriggerEnter;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Code.Behaviours.Abstraction
 {
-    public interface IGroundCheckBehaviour
+    public interface IGroundCheckBehaviour : IBehaviour
     {
         bool IsGrounded { get; }
         void OnNewContact(GameObject other);
