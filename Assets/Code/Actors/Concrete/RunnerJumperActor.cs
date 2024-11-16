@@ -1,9 +1,10 @@
 ﻿using Code.Actors.Abstraction;
 using Code.Behaviours.Abstraction;
 using Code.Behaviours.Concrete;
-using Code.Behaviours.Visuals;
 using Code.Behaviours.Visuals.Abstraction;
 using Code.Behaviours.Visuals.Concrete;
+using Code.Services.Abstraction;
+using Code.Services.ServiceLocator;
 using UnityEngine;
 
 namespace Code.Actors.Concrete
@@ -24,11 +25,13 @@ namespace Code.Actors.Concrete
         
         protected override void InitBehaviours()
         {
+            var tickService = ServiceLocator.Get<ITickService>();
+            
             _runBehaviour = new Rigidbody2DRunBehaviour(_rigidbody2D, _horizontalSpeed);
             _jumpBehaviour = new Rigidbody2DJumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
             _groundCheckBehaviour = new GroundCheckBehaviour();
-            _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, this);
-            _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, this);
+            _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, tickService);
+            _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, tickService);
         }
 
         public void UpdateMovement(float axis)
@@ -42,5 +45,11 @@ namespace Code.Actors.Concrete
 
         private void OnTriggerExit2D(Collider2D other)
             => _groundCheckBehaviour.OnLoseContact(other.gameObject);
+
+        protected override void DisposeBehaviours()
+        {
+            _runBehaviourVisual.Dispose();
+            _jumpBehaviourVisual.Dispose();
+        }
     }
 }

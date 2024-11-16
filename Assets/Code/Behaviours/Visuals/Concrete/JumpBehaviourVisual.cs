@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using Code.Behaviours.Abstraction;
+﻿using Code.Behaviours.Abstraction;
 using Code.Behaviours.Visuals.Abstraction;
+using Code.Services.Abstraction;
 using UnityEngine;
 
 namespace Code.Behaviours.Visuals.Concrete
@@ -10,29 +10,35 @@ namespace Code.Behaviours.Visuals.Concrete
         private static readonly int _jumpAnimationTrigger = Animator.StringToHash("Jumping");
         private static readonly int _midairAnimationTrigger = Animator.StringToHash("Midair");
 
-        public JumpBehaviourVisual(Animator animator, IJumpBehaviour jumpBehaviour, MonoBehaviour coroutineStarter)
+        private readonly Animator _animator;
+        private readonly IJumpBehaviour _jumpBehaviour;
+        private readonly ITickService _tickService;
+
+        public JumpBehaviourVisual(Animator animator, IJumpBehaviour jumpBehaviour, ITickService tickService)
         {
-            coroutineStarter.StartCoroutine(UpdateVisualCoroutine(animator, jumpBehaviour));
+            _animator = animator;
+            _jumpBehaviour = jumpBehaviour;
+            _tickService = tickService;
+            
+            _tickService.OnTick += OnTick;
         }
 
-        private static IEnumerator UpdateVisualCoroutine(Animator animator, IJumpBehaviour jumpBehaviour)
+        private void OnTick()
         {
-            var waitForEndOfFrame = new WaitForEndOfFrame();
-
-            while (true)
-            {
-                if (jumpBehaviour.VerticalVelocity != 0)
-                    animator.SetTrigger(_midairAnimationTrigger);
-                else
-                    animator.ResetTrigger(_midairAnimationTrigger);
+            if (_jumpBehaviour.VerticalVelocity != 0)
+                _animator.SetTrigger(_midairAnimationTrigger);
+            else
+                _animator.ResetTrigger(_midairAnimationTrigger);
                 
-                if (jumpBehaviour.VerticalVelocity > 0)
-                    animator.SetTrigger(_jumpAnimationTrigger);
-                else
-                    animator.ResetTrigger(_jumpAnimationTrigger);
+            if (_jumpBehaviour.VerticalVelocity > 0)
+                _animator.SetTrigger(_jumpAnimationTrigger);
+            else
+                _animator.ResetTrigger(_jumpAnimationTrigger);
+        }
 
-                yield return waitForEndOfFrame;
-            }
+        public void Dispose()
+        {
+            _tickService.OnTick -= OnTick;
         }
     }
 }

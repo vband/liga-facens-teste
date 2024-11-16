@@ -9,6 +9,7 @@ namespace Code.Actors.Concrete
         protected IActorController _controller;
 
         protected abstract void InitBehaviours();
+        protected abstract void DisposeBehaviours();
         protected abstract void BindController();
         protected abstract void DisposeController();
 
@@ -20,6 +21,12 @@ namespace Code.Actors.Concrete
 
         private void OnDestroy()
         {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            DisposeBehaviours();
             DisposeController();
         }
     }
