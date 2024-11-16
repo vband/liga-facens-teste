@@ -2,7 +2,7 @@
 
 namespace Code.Behaviours.Abstraction
 {
-    public interface IBouncerBehaviour
+    public interface IBounceBehaviour
     {
         event Action OnBounce;
         void Bounce(IBounceableBehaviour bounceableBehaviour);
