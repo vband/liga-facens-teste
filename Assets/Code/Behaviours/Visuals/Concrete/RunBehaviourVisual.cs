@@ -1,6 +1,6 @@
-using System.Collections;
 using Code.Behaviours.Abstraction;
 using Code.Behaviours.Visuals.Abstraction;
+using Code.Services.Abstraction;
 using UnityEngine;
 
 namespace Code.Behaviours.Visuals.Concrete
@@ -9,29 +9,36 @@ namespace Code.Behaviours.Visuals.Concrete
     {
         private static readonly int _runAnimationTrigger = Animator.StringToHash("Running");
 
+        private readonly Animator _animator;
+        private readonly SpriteRenderer _spriteRenderer;
+        private readonly IRunBehaviour _runBehaviour;
+        private readonly ITickService _tickService;
+
         public RunBehaviourVisual(Animator animator, SpriteRenderer spriteRenderer, IRunBehaviour runBehaviour,
-            MonoBehaviour coroutineStarter)
+            ITickService tickService)
         {
-            coroutineStarter.StartCoroutine(UpdateVisualCoroutine(animator, spriteRenderer, runBehaviour));
+            _animator = animator;
+            _spriteRenderer = spriteRenderer;
+            _runBehaviour = runBehaviour;
+            _tickService = tickService;
+
+            _tickService.OnTick += OnTick;
         }
 
-        private static IEnumerator UpdateVisualCoroutine(Animator animator, SpriteRenderer spriteRenderer,
-            IRunBehaviour runBehaviour)
+        private void OnTick()
         {
-            var waitForEndOfFrame = new WaitForEndOfFrame();
-            
-            while (true)
-            {
-                if (runBehaviour.HorizontalVelocity != 0)
-                    animator.SetTrigger(_runAnimationTrigger);
-                else
-                    animator.ResetTrigger(_runAnimationTrigger);
+            if (_runBehaviour.HorizontalVelocity != 0)
+                _animator.SetTrigger(_runAnimationTrigger);
+            else
+                _animator.ResetTrigger(_runAnimationTrigger);
 
-                if (runBehaviour.HorizontalVelocity != 0)
-                    spriteRenderer.flipX = runBehaviour.HorizontalVelocity < 0;
+            if (_runBehaviour.HorizontalVelocity != 0)
+                _spriteRenderer.flipX = _runBehaviour.HorizontalVelocity < 0;
+        }
 
-                yield return waitForEndOfFrame;
-            }
+        public void Dispose()
+        {
+            _tickService.OnTick -= OnTick;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Code.Behaviours.Visuals.Abstraction
 {
-    public interface IJumpBehaviourVisual
+    public interface IJumpBehaviourVisual : IBehaviourVisual
     {
         
     }

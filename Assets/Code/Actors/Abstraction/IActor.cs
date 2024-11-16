@@ -1,6 +1,8 @@
-﻿namespace Code.Actors.Abstraction
+﻿using System;
+
+namespace Code.Actors.Abstraction
 {
-    public interface IActor
+    public interface IActor : IDisposable
     {
         
     }
