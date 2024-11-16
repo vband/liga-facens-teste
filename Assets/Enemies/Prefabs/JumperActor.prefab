@@ -199,6 +199,7 @@ MonoBehaviour:
   _jumpVelocity: 7.5
   _jumpMaxDuration: 0.25
   _jumpTimeInterval: 3
+  _initialWaitTime: 4
 --- !u!1 &6960398606114764964
 GameObject:
   m_ObjectHideFlags: 0

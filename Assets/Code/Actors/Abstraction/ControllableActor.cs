@@ -1,34 +1,28 @@
 ﻿using Code.ActorControllers.Abstraction;
-using Code.Actors.Abstraction;
 using UnityEngine;
 
-namespace Code.Actors.Concrete
+namespace Code.Actors.Abstraction
 {
-    public abstract class BaseActor : MonoBehaviour, IActor
+    public abstract class ControllableActor : BaseActor
     {
+        [SerializeField] protected Rigidbody2D _rigidbody2D;
+        
         protected IActorController _controller;
 
-        protected abstract void InitBehaviours();
-        protected abstract void DisposeBehaviours();
         protected abstract void BindController();
 
-        private void Awake()
+        protected override void Init()
         {
-            InitBehaviours();
+            base.Init();
             BindController();
         }
 
-        private void OnDestroy()
+        public override void Dispose()
         {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            DisposeBehaviours();
+            base.Dispose();
             DisposeController();
         }
-
+        
         private void DisposeController()
         {
             _controller.SetEnabled(false);

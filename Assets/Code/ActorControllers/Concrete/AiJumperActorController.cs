@@ -10,15 +10,20 @@ namespace Code.ActorControllers.Concrete
         private readonly IJumperActor _actor;
         private readonly ITickService _tickService;
         private readonly float _jumpTimeInterval;
+        private readonly float _initialWaitTime;
 
         private bool _isEnabled;
         private float _jumpStartTime;
+        private float _currentWaitTime;
         
-        public AiJumperActorController(IJumperActor actor, ITickService tickService, float jumpTimeInterval)
+        public AiJumperActorController(IJumperActor actor, ITickService tickService, float jumpTimeInterval,
+            float initialWaitTime)
         {
             _actor = actor;
             _tickService = tickService;
             _jumpTimeInterval = jumpTimeInterval;
+            _initialWaitTime = initialWaitTime;
+            _currentWaitTime = Time.time;
 
             _tickService.OnTick += OnTick;
         }
@@ -27,6 +32,12 @@ namespace Code.ActorControllers.Concrete
         {
             if (!_isEnabled)
                 return;
+
+            if (_currentWaitTime < _initialWaitTime)
+            {
+                _currentWaitTime += Time.deltaTime;
+                return;
+            }
             
             if (Time.time - _jumpStartTime < _jumpTimeInterval)
                 _actor.UpdateJump(true);

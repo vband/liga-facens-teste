@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace Code.Behaviours.Concrete
 {
-    public class Rigidbody2DRunBehaviour : IRunBehaviour
+    public class RunBehaviour : IRunBehaviour
     {
         public float HorizontalVelocity => _rigidbody2D.velocity.x;
 
         private readonly Rigidbody2D _rigidbody2D;
         private readonly float _speed;
 
-        public Rigidbody2DRunBehaviour(Rigidbody2D rigidbody2D, float horizontalSpeed)
+        public RunBehaviour(Rigidbody2D rigidbody2D, float horizontalSpeed)
         {
             _rigidbody2D = rigidbody2D;
             _speed = horizontalSpeed;
