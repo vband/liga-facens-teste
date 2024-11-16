@@ -11,7 +11,6 @@ namespace Code.Actors.Concrete
         protected abstract void InitBehaviours();
         protected abstract void DisposeBehaviours();
         protected abstract void BindController();
-        protected abstract void DisposeController();
 
         private void Awake()
         {
@@ -28,6 +27,13 @@ namespace Code.Actors.Concrete
         {
             DisposeBehaviours();
             DisposeController();
+        }
+
+        private void DisposeController()
+        {
+            _controller.SetEnabled(false);
+            _controller.Dispose();
+            _controller = null;
         }
     }
 }
