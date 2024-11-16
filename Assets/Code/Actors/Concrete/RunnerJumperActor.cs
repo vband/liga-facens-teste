@@ -20,6 +20,7 @@ namespace Code.Actors.Concrete
         private IJumpBehaviour _jumpBehaviour;
         private IGroundCheckBehaviour _groundCheckBehaviour;
         private IRunBehaviourVisual _runBehaviourVisual;
+        private IJumpBehaviourVisual _jumpBehaviourVisual;
         
         protected override void InitBehaviours()
         {
@@ -27,6 +28,7 @@ namespace Code.Actors.Concrete
             _jumpBehaviour = new Rigidbody2DJumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
             _groundCheckBehaviour = new GroundCheckBehaviour();
             _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, this);
+            _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, this);
         }
 
         public void UpdateMovement(float axis)
