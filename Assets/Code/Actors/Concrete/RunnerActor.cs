@@ -12,7 +12,8 @@ namespace Code.Actors.Concrete
     public abstract class RunnerActor : Rigidbody2DActor, IRunnerActor
     {
         public float HorizontalPos => transform.position.x;
-        
+        public float HorizontalSpeed => _horizontalSpeed;
+
         [SerializeField] protected Animator _animator;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private float _horizontalSpeed;

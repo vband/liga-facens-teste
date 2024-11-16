@@ -41,7 +41,8 @@ namespace Code.ActorControllers.Concrete
         }
 
         private bool HasReachedBoundsLimit()
-            => _actor.HorizontalPos <= _movementBounds.min.x || _actor.HorizontalPos >= _movementBounds.max.x;
+            => _actor.HorizontalPos - _actor.HorizontalSpeed * Time.deltaTime <= _movementBounds.min.x
+               || _actor.HorizontalPos + _actor.HorizontalSpeed * Time.deltaTime >= _movementBounds.max.x;
 
         private Bounds CalculateBounds()
         {
