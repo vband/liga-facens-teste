@@ -5,15 +5,13 @@ namespace Code.Behaviours.Concrete
 {
     public class GroundCheckBehaviour : IGroundCheckBehaviour
     {
-        private const string GroundLayerName = "Ground";
+        private static readonly int _groundLayer = LayerMask.NameToLayer("Ground");
         
         public bool IsGrounded { get; private set; }
         
         public void OnNewContact(GameObject other)
         {
-            var groundLayer = LayerMask.NameToLayer(GroundLayerName);
-            
-            if (!SameLayer(groundLayer, other.layer))
+            if (!SameLayer(_groundLayer, other.layer))
                 return;
             
             IsGrounded = true;
@@ -21,9 +19,7 @@ namespace Code.Behaviours.Concrete
 
         public void OnLoseContact(GameObject other)
         {
-            var groundLayer = LayerMask.NameToLayer(GroundLayerName);
-            
-            if (!SameLayer(groundLayer, other.layer))
+            if (!SameLayer(_groundLayer, other.layer))
                 return;
             
             IsGrounded = false;
