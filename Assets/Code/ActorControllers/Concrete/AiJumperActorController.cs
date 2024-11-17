@@ -15,6 +15,7 @@ namespace Code.ActorControllers.Concrete
         private bool _isEnabled;
         private float _jumpStartTime;
         private float _currentWaitTime;
+        private bool _isUnderInitialWaitTime = true;
         
         public AiJumperActorController(IJumperActor actor, ITickService tickService, float jumpTimeInterval,
             float initialWaitTime)
@@ -33,10 +34,16 @@ namespace Code.ActorControllers.Concrete
             if (!_isEnabled)
                 return;
 
-            if (_currentWaitTime < _initialWaitTime)
+            if (_isUnderInitialWaitTime && _currentWaitTime < _initialWaitTime)
             {
                 _currentWaitTime += Time.deltaTime;
                 return;
+            }
+            
+            if (_isUnderInitialWaitTime && _currentWaitTime >= _initialWaitTime)
+            {
+                _isUnderInitialWaitTime = false;
+                _jumpStartTime = Time.time;
             }
             
             if (Time.time - _jumpStartTime < _jumpTimeInterval)
