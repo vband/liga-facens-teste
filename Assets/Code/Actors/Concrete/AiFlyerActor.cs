@@ -15,9 +15,11 @@ namespace Code.Actors.Concrete
         [SerializeField] private AnimationCurve _horizontalMovementCurve;
         [SerializeField] private float _horizontalCurveAmplitude;
         [SerializeField] private float _horizontalCurveDuration;
+        [SerializeField] private float _horizontalTimeOffset;
         [SerializeField] private AnimationCurve _verticalMovementCurve;
         [SerializeField] private float _verticalCurveAmplitude;
         [SerializeField] private float _verticalCurveDuration;
+        [SerializeField] private float _verticalTimeOffset;
 
         private IFlyBehaviour _flyBehaviour;
         private IKillBehaviour _killBehaviour;
@@ -37,7 +39,8 @@ namespace Code.Actors.Concrete
             _controller = new AiFlyerActorController(this, tickService, _horizontalMovementCurve,
                 _verticalMovementCurve, _horizontalCurveAmplitude,
                 _verticalCurveAmplitude, _horizontalCurveDuration,
-                _verticalCurveDuration);
+                _verticalCurveDuration, _horizontalTimeOffset,
+                _verticalTimeOffset);
             _controller.SetEnabled(true);
         }
 

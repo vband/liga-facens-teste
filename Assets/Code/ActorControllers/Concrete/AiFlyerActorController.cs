@@ -23,7 +23,8 @@ namespace Code.ActorControllers.Concrete
 
         public AiFlyerActorController(IFlyerActor actor, ITickService tickService, AnimationCurve horizontalMovementCurve,
             AnimationCurve verticalMovementCurve, float horizontalCurveAmplitude, float verticalCurveAmplitude,
-            float horizontalCurveDuration, float verticalCurveDuration)
+            float horizontalCurveDuration, float verticalCurveDuration, float horizontalTimeOffset,
+            float verticalTimeOffset)
         {
             _actor = actor;
             _tickService = tickService;
@@ -33,6 +34,8 @@ namespace Code.ActorControllers.Concrete
             _verticalCurveAmplitude = verticalCurveAmplitude;
             _horizontalCurveDuration = horizontalCurveDuration;
             _verticalCurveDuration = verticalCurveDuration;
+            _currentHorizontalMovementTime = horizontalTimeOffset;
+            _currentVerticalMovementTime = verticalTimeOffset;
 
             _lastPos = CalculateCurrentPos();
 

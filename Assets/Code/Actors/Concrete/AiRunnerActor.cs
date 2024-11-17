@@ -20,6 +20,7 @@ namespace Code.Actors.Concrete
         [SerializeField] private CollisionObserver _killTriggerObserver;
         [SerializeField] private float _horizontalSpeed;
         [SerializeField] private float _movementWidth;
+        [SerializeField] private bool _flipInitialDirection;
         
         private IRunBehaviour _runBehaviour;
         private IRunBehaviourVisual _runBehaviourVisual;
@@ -41,7 +42,7 @@ namespace Code.Actors.Concrete
         protected override void BindController()
         {
             var tickService = ServiceLocator.Get<ITickService>();
-            _controller = new AiRunnerActorController(this, tickService, _movementWidth);
+            _controller = new AiRunnerActorController(this, tickService, _movementWidth, _flipInitialDirection);
             _controller.SetEnabled(true);
         }
 

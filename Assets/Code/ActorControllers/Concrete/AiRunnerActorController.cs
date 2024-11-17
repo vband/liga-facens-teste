@@ -19,11 +19,15 @@ namespace Code.ActorControllers.Concrete
         private Bounds _movementBounds;
         private int _currentMovementDirection = 1;
         
-        public AiRunnerActorController(IRunnerActor actor, ITickService tickService, float movementWidth)
+        public AiRunnerActorController(IRunnerActor actor, ITickService tickService, float movementWidth,
+            bool flipInitialDirection)
         {
             _actor = actor;
             _tickService = tickService;
             _movementWidth = movementWidth;
+
+            if (flipInitialDirection)
+                _currentMovementDirection *= -1;
 
             _tickService.OnTick += OnTick;
         }
