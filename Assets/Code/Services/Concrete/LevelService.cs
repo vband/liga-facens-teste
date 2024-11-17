@@ -19,6 +19,12 @@ namespace Code.Services.Concrete
         {
             _levels = Resources.LoadAll<LevelSO>(LevelsPath);
         }
+
+        public void LoadFirstLevel()
+        {
+            _currentLevelIndex = 0;
+            RestartCurrentLevel();
+        }
         
         public void LoadNextLevel()
         {
