@@ -19,8 +19,8 @@ TagManager:
   - BounceableTrigger
   - KillerCollider
   - KillableTrigger
-  - 
-  - 
+  - LevelFinisherCollider
+  - LevelFinishTrigger
   - 
   - 
   - 
@@ -40,6 +40,21 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 825414475
+    locked: 0
+  - name: Water
+    uniqueID: 1302918213
+    locked: 0
+  - name: Ground
+    uniqueID: 3070340591
+    locked: 0
+  - name: Platforms
+    uniqueID: 1369146999
+    locked: 0
+  - name: Props
+    uniqueID: 3471516373
     locked: 0
   - name: Enemies
     uniqueID: 148183673

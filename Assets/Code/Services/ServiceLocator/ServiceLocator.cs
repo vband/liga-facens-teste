@@ -36,9 +36,21 @@ namespace Code.Services.ServiceLocator
         private static void InstallServices()
         {
             InstallTickService();
+            InstallLevelService();
+            InstallLevelFinishedMenuService();
+            InstallLevelFailedMenuService();
         }
 
         private static void InstallTickService()
             => Register<ITickService>(() => new TickService());
+
+        private static void InstallLevelService()
+            => Register<ILevelService>(() => new LevelService());
+
+        private static void InstallLevelFinishedMenuService()
+            => Register<ILevelFinishedMenuService>(() => new LevelFinishedMenuService());
+
+        private static void InstallLevelFailedMenuService()
+            => Register<ILevelFailedMenuService>(() => new LevelFailedMenuService());
     }
 }
