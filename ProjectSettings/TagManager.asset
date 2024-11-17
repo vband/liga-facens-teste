@@ -19,8 +19,8 @@ TagManager:
   - BounceableTrigger
   - KillerCollider
   - KillableTrigger
-  - 
-  - 
+  - LevelFinisherCollider
+  - LevelFinishTrigger
   - 
   - 
   - 
