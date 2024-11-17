@@ -12,14 +12,8 @@ namespace Code.Actors.Concrete
     public class AiFlyerActor : ControllableActor, IFlyerActor
     {
         [SerializeField] private CollisionObserver _killTriggerObserver;
-        [SerializeField] private AnimationCurve _horizontalMovementCurve;
-        [SerializeField] private float _horizontalCurveAmplitude;
-        [SerializeField] private float _horizontalCurveDuration;
-        [SerializeField] private float _horizontalTimeOffset;
-        [SerializeField] private AnimationCurve _verticalMovementCurve;
-        [SerializeField] private float _verticalCurveAmplitude;
-        [SerializeField] private float _verticalCurveDuration;
-        [SerializeField] private float _verticalTimeOffset;
+        [SerializeField] private FlyMovementData _horizontalMovementData;
+        [SerializeField] private FlyMovementData _verticalMovementData;
 
         private IFlyBehaviour _flyBehaviour;
         private IKillBehaviour _killBehaviour;
@@ -36,11 +30,7 @@ namespace Code.Actors.Concrete
         {
             var tickService = ServiceLocator.Get<ITickService>();
 
-            _controller = new AiFlyerActorController(this, tickService, _horizontalMovementCurve,
-                _verticalMovementCurve, _horizontalCurveAmplitude,
-                _verticalCurveAmplitude, _horizontalCurveDuration,
-                _verticalCurveDuration, _horizontalTimeOffset,
-                _verticalTimeOffset);
+            _controller = new AiFlyerActorController(this, tickService, _horizontalMovementData, _verticalMovementData);
             _controller.SetEnabled(true);
         }
 
