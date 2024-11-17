@@ -13,6 +13,11 @@ namespace Code.Behaviours.Concrete
         }
         
         public void UpdateBounce(float verticalVelocity)
-            => _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, verticalVelocity);
+        {
+            if (_rigidbody2D == null) // An actor can die while under the influence of a BounceBehaviour
+                return;
+            
+            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, verticalVelocity);
+        }
     }
 }
