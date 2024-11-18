@@ -11,14 +11,14 @@ namespace Code.Menus.LevelFailed
         [SerializeField] private Button _restartLevelButton;
 
         private ILevelFailedMenuService _levelFailedMenuService;
-        private ILevelService _levelService;
+        private ILevelScenesService _levelScenesService;
 
         private void Start()
         {
             _canvas.SetActive(false);
             
             _levelFailedMenuService = ServiceLocator.Get<ILevelFailedMenuService>();
-            _levelService = ServiceLocator.Get<ILevelService>();
+            _levelScenesService = ServiceLocator.Get<ILevelScenesService>();
             
             _levelFailedMenuService.OnLevelFailedMenuInvoked += InvokeMenu;
             
@@ -29,7 +29,7 @@ namespace Code.Menus.LevelFailed
             => _canvas.SetActive(true);
 
         private void RestartLevel()
-            => _levelService.RestartCurrentLevel();
+            => _levelScenesService.RestartCurrentLevel();
 
         private void OnDestroy()
         {

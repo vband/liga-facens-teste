@@ -12,31 +12,31 @@ namespace Code.Menus.LevelFinished
         [SerializeField] private Button _restartLevelButton;
 
         private ILevelFinishedMenuService _levelFinishedMenuService;
-        private ILevelService _levelService;
+        private ILevelScenesService _levelScenesService;
 
         private void Start()
         {
             _canvas.SetActive(false);
             
             _levelFinishedMenuService = ServiceLocator.Get<ILevelFinishedMenuService>();
-            _levelService = ServiceLocator.Get<ILevelService>();
+            _levelScenesService = ServiceLocator.Get<ILevelScenesService>();
             
             _levelFinishedMenuService.OnLevelFinishedMenuInvoked += InvokeMenu;
             
             _nextLevelButton.onClick.AddListener(GoToNextLevel);
             _restartLevelButton.onClick.AddListener(RestartLevel);
 
-            _nextLevelButton.interactable = !_levelService.IsLastLevel;
+            _nextLevelButton.interactable = !_levelScenesService.IsLastLevel;
         }
 
         private void InvokeMenu()
             => _canvas.SetActive(true);
 
         private void GoToNextLevel()
-            => _levelService.LoadNextLevel();
+            => _levelScenesService.LoadNextLevel();
 
         private void RestartLevel()
-            => _levelService.RestartCurrentLevel();
+            => _levelScenesService.RestartCurrentLevel();
 
         private void OnDestroy()
         {
