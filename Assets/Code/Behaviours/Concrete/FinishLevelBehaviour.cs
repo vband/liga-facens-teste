@@ -5,20 +5,23 @@ namespace Code.Behaviours.Concrete
 {
     public class FinishLevelBehaviour : IFinishLevelBehaviour
     {
-        private readonly ILevelFinishedMenuService _levelFinishedMenuService;
+        private readonly ILevelFinishedService _levelFinishedService;
         private readonly ILevelScenesService _levelScenesService;
+        private readonly ILevelModelsService _levelModelsService;
         
-        public FinishLevelBehaviour(ILevelFinishedMenuService levelFinishedMenuService,
-            ILevelScenesService levelScenesService)
+        public FinishLevelBehaviour(ILevelFinishedService levelFinishedService,
+            ILevelScenesService levelScenesService, ILevelModelsService levelModelsService)
         {
-            _levelFinishedMenuService = levelFinishedMenuService;
+            _levelFinishedService = levelFinishedService;
             _levelScenesService = levelScenesService;
+            _levelModelsService = levelModelsService;
         }
         
         public void FinishCurrentLevel()
         {
-            _levelScenesService.UnlockNextLevel();
-            _levelFinishedMenuService.InvokeLevelFinishedMenu();
+            var currentLevelIndex = _levelScenesService.CurrentLevelIndex;
+            _levelModelsService.UnlockLevel(currentLevelIndex + 1);
+            _levelFinishedService.InvokeLevelFinished();
         }
     }
 }

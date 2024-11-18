@@ -7,6 +7,8 @@ namespace Code.Services.Abstraction
     public interface ILevelModelsService : IService
     {
         Task<List<ILevelModel>> LoadLevelModelsAsync();
-        Task WriteLevelUnlockedAsync(int levelIndex);
+        void UnlockLevel(int levelIndex);
+        ILevelModel GetLevelModelFromCache(int levelIndex);
+        void SetBestCompletionTime(int levelIndex, float bestCompletionTime);
     }
 }

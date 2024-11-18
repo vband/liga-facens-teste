@@ -10,22 +10,22 @@ namespace Code.Menus.LevelFailed
         [SerializeField] private GameObject _canvas;
         [SerializeField] private Button _restartLevelButton;
 
-        private ILevelFailedMenuService _levelFailedMenuService;
+        private ILevelFailedService _levelFailedService;
         private ILevelScenesService _levelScenesService;
 
         private void Start()
         {
             _canvas.SetActive(false);
             
-            _levelFailedMenuService = ServiceLocator.Get<ILevelFailedMenuService>();
+            _levelFailedService = ServiceLocator.Get<ILevelFailedService>();
             _levelScenesService = ServiceLocator.Get<ILevelScenesService>();
             
-            _levelFailedMenuService.OnLevelFailedMenuInvoked += InvokeMenu;
+            _levelFailedService.OnLevelFailedInvoked += OpenMenu;
             
             _restartLevelButton.onClick.AddListener(RestartLevel);
         }
 
-        private void InvokeMenu()
+        private void OpenMenu()
             => _canvas.SetActive(true);
 
         private void RestartLevel()
@@ -33,7 +33,7 @@ namespace Code.Menus.LevelFailed
 
         private void OnDestroy()
         {
-            _levelFailedMenuService.OnLevelFailedMenuInvoked -= InvokeMenu;
+            _levelFailedService.OnLevelFailedInvoked -= OpenMenu;
         }
     }
 }

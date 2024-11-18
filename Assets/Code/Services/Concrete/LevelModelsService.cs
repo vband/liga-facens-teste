@@ -46,14 +46,30 @@ namespace Code.Services.Concrete
             return levelModels;
         }
 
-        public async Task WriteLevelUnlockedAsync(int levelIndex)
+        public void UnlockLevel(int levelIndex)
         {
+            if (levelIndex < 0 || levelIndex >= _cachedLevelModels.Count)
+                return;
+            
             if (_cachedLevelModels[levelIndex].Unlocked)
                 return;
             
             _cachedLevelModels[levelIndex].Unlocked = true;
 
-            await Persistency.SaveAsync(LevelModelsPath, _cachedLevelModels);
+            SaveCachedLevels();
         }
+
+        public ILevelModel GetLevelModelFromCache(int levelIndex)
+            => _cachedLevelModels[levelIndex];
+
+        public void SetBestCompletionTime(int levelIndex, float bestCompletionTime)
+        {
+            _cachedLevelModels[levelIndex].BestCompletionTime = bestCompletionTime;
+
+            SaveCachedLevels();
+        }
+
+        private async Task SaveCachedLevels()
+            => await Persistency.SaveAsync(LevelModelsPath, _cachedLevelModels);
     }
 }
