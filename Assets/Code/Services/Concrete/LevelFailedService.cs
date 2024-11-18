@@ -7,13 +7,13 @@ using Object = UnityEngine.Object;
 
 namespace Code.Services.Concrete
 {
-    public class LevelFailedMenuService : ILevelFailedMenuService
+    public class LevelFailedService : ILevelFailedService
     {
-        public event Action OnLevelFailedMenuInvoked;
+        public event Action OnLevelFailed;
 
         private KillableActor _playerKillableActor;
 
-        public LevelFailedMenuService()
+        public LevelFailedService()
         {
             BindPlayerKillableActor();
             SceneManager.sceneLoaded += (_, _) => BindPlayerKillableActor();
@@ -26,10 +26,10 @@ namespace Code.Services.Concrete
             if (_playerKillableActor == null)
                 return;
             
-            _playerKillableActor.KillableBehaviour.OnDied += InvokeLevelFailedMenu;
+            _playerKillableActor.KillableBehaviour.OnDied += InvokeLevelFailed;
         }
 
-        public void InvokeLevelFailedMenu()
-            => OnLevelFailedMenuInvoked?.Invoke();
+        public void InvokeLevelFailed()
+            => OnLevelFailed?.Invoke();
     }
 }

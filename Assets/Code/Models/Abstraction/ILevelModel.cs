@@ -5,5 +5,6 @@
         string Label { get; }
         bool Unlocked { get; set; }
         int LevelIndex { get; }
+        float BestCompletionTime { get; set; }
     }
 }

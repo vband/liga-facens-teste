@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Code.LevelScenes.Abstraction;
-using Code.LevelScenes.Concrete;
+using Code.Models.Abstraction;
+using Code.Models.Concrete;
 using Code.Services.Abstraction;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,17 +11,16 @@ namespace Code.Services.Concrete
     {
         private const string LevelsPath = "Levels";
 
-        public IReadOnlyList<ILevelScene> LevelScenes => _levels;
+        public IReadOnlyList<ILevelSceneModel> LevelScenes => _levels;
 
-        public bool IsLastLevel => _currentLevelIndex == _levels.Length - 1;
+        public bool IsLastLevel => CurrentLevelIndex == _levels.Length - 1;
+        public int CurrentLevelIndex { get; private set; }
 
-        private readonly ILevelScene[] _levels;
+        private readonly ILevelSceneModel[] _levels;
 
-        private int _currentLevelIndex;
-        
         public LevelScenesService()
         {
-            _levels = Resources.LoadAll<LevelSceneSO>(LevelsPath);
+            _levels = Resources.LoadAll<LevelSceneModelSo>(LevelsPath);
         }
         
         public void LoadNextLevel()
@@ -29,28 +28,17 @@ namespace Code.Services.Concrete
             if (IsLastLevel)
                 return;
             
-            _currentLevelIndex++;
+            CurrentLevelIndex++;
             RestartCurrentLevel();
         }
 
         public void RestartCurrentLevel()
-            => SceneManager.LoadSceneAsync(_levels[_currentLevelIndex].LevelSceneName);
+            => SceneManager.LoadSceneAsync(_levels[CurrentLevelIndex].LevelSceneName);
 
         public void LoadLevel(int levelIndex)
         {
-            _currentLevelIndex = levelIndex;
+            CurrentLevelIndex = levelIndex;
             RestartCurrentLevel();
-        }
-
-        public async void UnlockNextLevel()
-        {
-            if (IsLastLevel)
-                return;
-
-            var nextLevelIndex = _currentLevelIndex + 1;
-            var levelModelsService = ServiceLocator.ServiceLocator.Get<ILevelModelsService>();
-            
-            await levelModelsService.WriteLevelUnlockedAsync(nextLevelIndex);
         }
     }
 }
