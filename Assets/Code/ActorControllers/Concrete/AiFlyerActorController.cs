@@ -13,6 +13,8 @@ namespace Code.ActorControllers.Concrete
         private readonly FlyMovementData _verticalMovementData;
 
         private bool _isEnabled;
+        private float _horizontalMaxSpeed;
+        private float _verticalMaxSpeed;
         private float _currentHorizontalMovementTime;
         private float _currentVerticalMovementTime;
         private Vector2 _lastPos;
@@ -24,6 +26,9 @@ namespace Code.ActorControllers.Concrete
             _tickService = tickService;
             _horizontalMovementData = horizontalMovementData;
             _verticalMovementData = verticalMovementData;
+
+            _horizontalMaxSpeed = _horizontalMovementData.CurveAmplitude / _horizontalMovementData.CurveDuration;
+            _verticalMaxSpeed = _verticalMovementData.CurveAmplitude / _verticalMovementData.CurveDuration;
             
             _currentHorizontalMovementTime = _horizontalMovementData.TimeOffset;
             _currentVerticalMovementTime = _verticalMovementData.TimeOffset;
@@ -47,7 +52,11 @@ namespace Code.ActorControllers.Concrete
             var newPos = CalculateCurrentPos();
             var delta = newPos - _lastPos;
             
-            _actor.UpdateMovement(delta);
+            var axis = new Vector2(
+                delta.x / (_horizontalMaxSpeed * Time.deltaTime),
+                delta.y / (_verticalMaxSpeed * Time.deltaTime));
+            
+            _actor.UpdateMovement(axis);
             
             _lastPos = newPos;
             
