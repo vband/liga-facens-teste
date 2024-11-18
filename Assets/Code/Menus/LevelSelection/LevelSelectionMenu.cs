@@ -52,8 +52,8 @@ namespace Code.Menus.LevelSelection
 
             for (var i = _serializedLevelViews.Count; i <= _levelModels.Count - 1; i++)
             {
-                var newView = Instantiate(_serializedLevelViews[^1],
-                    _serializedLevelViews[^1].gameObject.transform.parent);
+                var newView = Instantiate(_serializedLevelViews[0],
+                    _serializedLevelViews[0].gameObject.transform.parent);
                 _serializedLevelViews.Add(newView);
             }
         }
@@ -62,9 +62,13 @@ namespace Code.Menus.LevelSelection
         {
             if (_serializedLevelViews.Count <= _levelModels.Count)
                 return;
-            
-            for (var i = _serializedLevelViews.Count - 1; i >= _levelModels.Count - 1; i--)
-                Destroy(_serializedLevelViews[i].gameObject);
+
+            for (var i = _serializedLevelViews.Count - 1; i >= _levelModels.Count; i--)
+            {
+                var viewToDestroy = _serializedLevelViews[i];
+                _serializedLevelViews.RemoveAt(i);
+                Destroy(viewToDestroy.gameObject);
+            }
         }
 
         private void BindPresenters()

@@ -9,7 +9,7 @@ namespace Code.Services.Concrete
 {
     public class LevelModelsService : ILevelModelsService
     {
-        private const string LevelModelsPath = "LevelModels";
+        private const string LevelModelsPath = "LevelModels.dat";
         
         private readonly ILevelScenesService _levelScenesService;
 
