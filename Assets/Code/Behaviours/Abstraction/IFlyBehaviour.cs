@@ -4,6 +4,6 @@ namespace Code.Behaviours.Abstraction
 {
     public interface IFlyBehaviour : IBehaviour
     {
-        void UpdateMovement(Vector2 delta);
+        void UpdateMovement(Vector2 axis);
     }
 }

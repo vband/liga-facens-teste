@@ -20,7 +20,10 @@ namespace Code.Actors.Concrete
         
         protected override void InitBehaviours()
         {
-            _flyBehaviour = new FlyBehaviour(transform);
+            _flyBehaviour = new FlyBehaviour(transform,
+                _horizontalMovementData.CurveAmplitude / _horizontalMovementData.CurveDuration,
+                _verticalMovementData.CurveAmplitude / _verticalMovementData.CurveDuration);
+            
             _killBehaviour = new KillBehaviour();
             
             _killTriggerObserver.OnTriggerEnter += OnKillTriggerEnter;
@@ -34,8 +37,8 @@ namespace Code.Actors.Concrete
             _controller.SetEnabled(true);
         }
 
-        public void UpdateMovement(Vector2 position)
-            => _flyBehaviour.UpdateMovement(position);
+        public void UpdateMovement(Vector2 axis)
+            => _flyBehaviour.UpdateMovement(axis);
 
         private void OnKillTriggerEnter(GameObject go)
         {
