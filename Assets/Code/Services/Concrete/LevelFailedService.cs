@@ -9,7 +9,7 @@ namespace Code.Services.Concrete
 {
     public class LevelFailedService : ILevelFailedService
     {
-        public event Action OnLevelFailedInvoked;
+        public event Action OnLevelFailed;
 
         private KillableActor _playerKillableActor;
 
@@ -30,6 +30,6 @@ namespace Code.Services.Concrete
         }
 
         public void InvokeLevelFailed()
-            => OnLevelFailedInvoked?.Invoke();
+            => OnLevelFailed?.Invoke();
     }
 }

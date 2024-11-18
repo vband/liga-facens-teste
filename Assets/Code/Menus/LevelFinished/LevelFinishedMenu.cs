@@ -25,7 +25,7 @@ namespace Code.Menus.LevelFinished
             _levelScenesService = ServiceLocator.Get<ILevelScenesService>();
             _levelModelsService = ServiceLocator.Get<ILevelModelsService>();
             
-            _levelFinishedService.OnLevelFinishedInvoked += OpenMenu;
+            _levelFinishedService.OnLevelFinished += OpenMenu;
             
             _nextLevelButton.onClick.AddListener(GoToNextLevel);
             _restartLevelButton.onClick.AddListener(RestartLevel);
@@ -54,7 +54,7 @@ namespace Code.Menus.LevelFinished
 
         private void OnDestroy()
         {
-            _levelFinishedService.OnLevelFinishedInvoked -= OpenMenu;
+            _levelFinishedService.OnLevelFinished -= OpenMenu;
         }
     }
 }

@@ -5,9 +5,9 @@ namespace Code.Services.Concrete
 {
     public class LevelFinishedService : ILevelFinishedService
     {
-        public event Action OnLevelFinishedInvoked;
+        public event Action OnLevelFinished;
 
         public void InvokeLevelFinished()
-            => OnLevelFinishedInvoked?.Invoke();
+            => OnLevelFinished?.Invoke();
     }
 }

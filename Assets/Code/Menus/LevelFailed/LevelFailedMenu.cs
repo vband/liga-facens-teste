@@ -20,7 +20,7 @@ namespace Code.Menus.LevelFailed
             _levelFailedService = ServiceLocator.Get<ILevelFailedService>();
             _levelScenesService = ServiceLocator.Get<ILevelScenesService>();
             
-            _levelFailedService.OnLevelFailedInvoked += OpenMenu;
+            _levelFailedService.OnLevelFailed += OpenMenu;
             
             _restartLevelButton.onClick.AddListener(RestartLevel);
         }
@@ -33,7 +33,7 @@ namespace Code.Menus.LevelFailed
 
         private void OnDestroy()
         {
-            _levelFailedService.OnLevelFailedInvoked -= OpenMenu;
+            _levelFailedService.OnLevelFailed -= OpenMenu;
         }
     }
 }

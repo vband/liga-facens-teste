@@ -4,7 +4,7 @@ namespace Code.Services.Abstraction
 {
     public interface ILevelFinishedService : IService
     {
-        event Action OnLevelFinishedInvoked;
+        event Action OnLevelFinished;
         void InvokeLevelFinished();
     }
 }
