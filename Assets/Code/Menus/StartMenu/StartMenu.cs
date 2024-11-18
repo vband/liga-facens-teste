@@ -8,17 +8,17 @@ namespace Code.Menus.StartMenu
     public class StartMenu : MonoBehaviour
     {
         [SerializeField] private Button _playButton;
-        
-        private ILevelService _levelService;
+
+        private ILevelSelectionMenuService _levelSelectionMenuService;
         
         private void Start()
         {
-            _levelService = ServiceLocator.Get<ILevelService>();
+            _levelSelectionMenuService = ServiceLocator.Get<ILevelSelectionMenuService>();
             
-            _playButton.onClick.AddListener(StartFirstLevel);
+            _playButton.onClick.AddListener(InvokeLevelSelectionMenu);
         }
 
-        private void StartFirstLevel()
-            => _levelService.LoadFirstLevel();
+        private void InvokeLevelSelectionMenu()
+            => _levelSelectionMenuService.InvokeLevelSelectionMenu();
     }
 }

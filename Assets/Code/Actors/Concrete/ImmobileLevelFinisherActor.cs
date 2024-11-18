@@ -17,7 +17,8 @@ namespace Code.Actors.Concrete
         protected override void InitBehaviours()
         {
             var levelFinishedMenuService = ServiceLocator.Get<ILevelFinishedMenuService>();
-            _finishLevelBehaviour = new FinishLevelBehaviour(levelFinishedMenuService);
+            var levelScenesService = ServiceLocator.Get<ILevelScenesService>();
+            _finishLevelBehaviour = new FinishLevelBehaviour(levelFinishedMenuService, levelScenesService);
 
             _finishLevelTriggerObserver.OnTriggerEnter += OnFinishLevelTriggerEnter;
         }
