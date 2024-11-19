@@ -15,7 +15,6 @@ namespace Code.Actors.Concrete
     {
         public float HorizontalPos => transform.position.x;
 
-        [SerializeField] protected Animator _animator;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private CollisionObserver _groundTriggerObserver;
         [SerializeField] private float _horizontalSpeed;
@@ -42,6 +41,7 @@ namespace Code.Actors.Concrete
 
             _groundTriggerObserver.OnTriggerEnter += OnGroundTriggerEnter;
             _groundTriggerObserver.OnTriggerExit += OnGroundTriggerExit;
+            KillableBehaviour.OnDied += DisableBounceableBehaviour;
         }
 
         protected override void BindController()
@@ -61,6 +61,9 @@ namespace Code.Actors.Concrete
         public void UpdateJump(bool jumping)
             => _jumpBehaviour.UpdateJump(jumping, _groundCheckBehaviour.IsGrounded);
 
+        private void DisableBounceableBehaviour()
+            => BounceableBehaviour.Enabled = false;
+
         private void OnGroundTriggerEnter(GameObject go)
             => _groundCheckBehaviour.OnNewContact(go);
 
@@ -69,11 +72,14 @@ namespace Code.Actors.Concrete
 
         protected override void DisposeBehaviours()
         {
+            base.DisposeBehaviours();
+            
             _runBehaviourVisual.Dispose();
             _jumpBehaviourVisual.Dispose();
             
             _groundTriggerObserver.OnTriggerEnter -= OnGroundTriggerEnter;
             _groundTriggerObserver.OnTriggerExit -= OnGroundTriggerExit;
+            KillableBehaviour.OnDied -= DisableBounceableBehaviour;
         }
     }
 }

@@ -14,6 +14,18 @@ namespace Code.Services.Concrete
         private readonly ILevelScenesService _levelScenesService;
 
         private List<ILevelModel> _cachedLevelModels;
+        private List<ILevelModel> CachedLevelModels
+        {
+            get
+            {
+                if (_cachedLevelModels != null)
+                    return _cachedLevelModels;
+
+                _cachedLevelModels = LoadLevelModelsAsync().Result;
+
+                return _cachedLevelModels;
+            }
+        }
 
         public LevelModelsService(ILevelScenesService levelScenesService)
         {
@@ -48,28 +60,28 @@ namespace Code.Services.Concrete
 
         public void UnlockLevel(int levelIndex)
         {
-            if (levelIndex < 0 || levelIndex >= _cachedLevelModels.Count)
+            if (levelIndex < 0 || levelIndex >= CachedLevelModels.Count)
                 return;
             
-            if (_cachedLevelModels[levelIndex].Unlocked)
+            if (CachedLevelModels[levelIndex].Unlocked)
                 return;
             
-            _cachedLevelModels[levelIndex].Unlocked = true;
+            CachedLevelModels[levelIndex].Unlocked = true;
 
-            SaveCachedLevels();
+            SaveCachedLevelModels().Forget();
         }
 
         public ILevelModel GetLevelModelFromCache(int levelIndex)
-            => _cachedLevelModels[levelIndex];
+            => CachedLevelModels[levelIndex];
 
         public void SetBestCompletionTime(int levelIndex, float bestCompletionTime)
         {
-            _cachedLevelModels[levelIndex].BestCompletionTime = bestCompletionTime;
+            CachedLevelModels[levelIndex].BestCompletionTime = bestCompletionTime;
 
-            SaveCachedLevels();
+            SaveCachedLevelModels().Forget();
         }
 
-        private async Task SaveCachedLevels()
-            => await Persistency.SaveAsync(LevelModelsPath, _cachedLevelModels);
+        private async Task SaveCachedLevelModels()
+            => await Persistency.SaveAsync(LevelModelsPath, CachedLevelModels);
     }
 }

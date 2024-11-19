@@ -20,9 +20,7 @@ namespace Code.Behaviours.Visuals.Concrete
         }
 
         private void OnBounce()
-        {
-            _animator.Play(_bounceAnimation);
-        }
+            => _animator.Play(_bounceAnimation);
 
         public void Dispose()
         {

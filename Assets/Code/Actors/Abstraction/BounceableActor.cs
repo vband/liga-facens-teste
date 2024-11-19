@@ -1,10 +1,11 @@
-﻿using Code.Behaviours.Concrete;
+﻿using Code.Behaviours.Abstraction;
+using Code.Behaviours.Concrete;
 
 namespace Code.Actors.Abstraction
 {
     public abstract class BounceableActor : ControllableActor
     {
-        public BounceableBehaviour BounceableBehaviour { get; private set; }
+        public IBounceableBehaviour BounceableBehaviour { get; private set; }
 
         protected override void InitBehaviours()
         {

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1230089052948960711}
   - component: {fileID: 9058377578870155420}
   - component: {fileID: 2684966402300175221}
+  - component: {fileID: 1349444957054084952}
   m_Layer: 0
   m_Name: CinemachineVirtualCamera
   m_TagString: Untagged
@@ -89,6 +90,19 @@ MonoBehaviour:
   m_Damping: 0
   m_MaxWindowSize: -1
   m_Padding: 0
+--- !u!114 &1349444957054084952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 666792996302973875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8e931b529384663b9d7d46e3d9ce8a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cinemachineVirtualCamera: {fileID: 9058377578870155420}
 --- !u!1 &8142600223501531831
 GameObject:
   m_ObjectHideFlags: 0
