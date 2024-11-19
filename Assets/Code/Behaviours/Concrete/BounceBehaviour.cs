@@ -24,6 +24,9 @@ namespace Code.Behaviours.Concrete
 
         public void Bounce(IBounceableBehaviour bounceableBehaviour)
         {
+            if (!bounceableBehaviour.Enabled)
+                return;
+            
             OnBounce?.Invoke();
             _coroutineStarter.StartCoroutine(BounceCoroutine(bounceableBehaviour, _verticalVelocity, _maxDuration));
         }
