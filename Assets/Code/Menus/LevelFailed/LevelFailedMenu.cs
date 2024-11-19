@@ -14,6 +14,7 @@ namespace Code.Menus.LevelFailed
         private ILevelFailedService _levelFailedService;
         private ILevelScenesService _levelScenesService;
         private IStartMenuSceneService _startMenuSceneService;
+        private IAdsService _adsService;
 
         private void Start()
         {
@@ -22,21 +23,22 @@ namespace Code.Menus.LevelFailed
             _levelFailedService = ServiceLocator.Get<ILevelFailedService>();
             _levelScenesService = ServiceLocator.Get<ILevelScenesService>();
             _startMenuSceneService = ServiceLocator.Get<IStartMenuSceneService>();
+            _adsService = ServiceLocator.Get<IAdsService>();
             
             _levelFailedService.OnLevelFailed += OpenMenu;
             
-            _restartLevelButton.onClick.AddListener(RestartLevel);
-            _startMenuButton.onClick.AddListener(GoToStartMenu);
+            _restartLevelButton.onClick.AddListener(RestartLevelAfterAd);
+            _startMenuButton.onClick.AddListener(GoToStartMenuAfterAd);
         }
 
         private void OpenMenu()
             => _canvas.SetActive(true);
 
-        private void RestartLevel()
-            => _levelScenesService.RestartCurrentLevel();
+        private void RestartLevelAfterAd()
+            => _adsService.DoAfterInterstitialAd(() => _levelScenesService.RestartCurrentLevel());
 
-        private void GoToStartMenu()
-            => _startMenuSceneService.LoadStartMenu();
+        private void GoToStartMenuAfterAd()
+            => _adsService.DoAfterInterstitialAd(() => _startMenuSceneService.LoadStartMenu());
 
         private void OnDestroy()
         {
