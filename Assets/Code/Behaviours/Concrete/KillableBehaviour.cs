@@ -14,6 +14,8 @@ namespace Code.Behaviours.Concrete
         private readonly KillableActor _actor;
         private readonly WaitForSeconds _waitForSeconds;
 
+        private bool _isDead;
+
         public KillableBehaviour(KillableActor actor, float waitTimeBeforeDeathNotification)
         {
             _actor = actor;
@@ -22,6 +24,10 @@ namespace Code.Behaviours.Concrete
 
         public void Die()
         {
+            if (_isDead)
+                return;
+
+            _isDead = true;
             OnDied?.Invoke();
             _actor.Dispose();
             _actor.StartCoroutine(InvokeDeathNotificationCoroutine());
