@@ -9,9 +9,11 @@ namespace Code.Services.Concrete
     {
         private const string GameId = "1244935";
         private const string videoPlacement = "video";
+        private const int AdInvocationInterval = 3;
 
         private bool _initializionComplete;
         private Action _afterAdCallback;
+        private int _currentAdInvocationCount;
 
         public UnityAdsService()
         {
@@ -25,7 +27,16 @@ namespace Code.Services.Concrete
                 afterAd.Invoke();
                 return;
             }
+
+            _currentAdInvocationCount++;
+
+            if (_currentAdInvocationCount < AdInvocationInterval)
+            {
+                afterAd.Invoke();
+                return;
+            }
             
+            _currentAdInvocationCount = 0;
             LoadNonRewardedAd();
             _afterAdCallback = afterAd;
         }
