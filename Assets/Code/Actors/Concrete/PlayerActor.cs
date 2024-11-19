@@ -15,7 +15,6 @@ namespace Code.Actors.Concrete
     {
         public float HorizontalPos => transform.position.x;
 
-        [SerializeField] protected Animator _animator;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private CollisionObserver _groundTriggerObserver;
         [SerializeField] private float _horizontalSpeed;
@@ -69,6 +68,8 @@ namespace Code.Actors.Concrete
 
         protected override void DisposeBehaviours()
         {
+            base.DisposeBehaviours();
+            
             _runBehaviourVisual.Dispose();
             _jumpBehaviourVisual.Dispose();
             

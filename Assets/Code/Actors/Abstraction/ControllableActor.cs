@@ -27,7 +27,6 @@ namespace Code.Actors.Abstraction
         {
             _controller.SetEnabled(false);
             _controller.Dispose();
-            _controller = null;
         }
     }
 }

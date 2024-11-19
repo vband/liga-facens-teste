@@ -26,7 +26,7 @@ namespace Code.Services.Concrete
             if (_playerKillableActor == null)
                 return;
             
-            _playerKillableActor.KillableBehaviour.OnDied += InvokeLevelFailed;
+            _playerKillableActor.KillableBehaviour.OnDeathNotification += InvokeLevelFailed;
         }
 
         public void InvokeLevelFailed()

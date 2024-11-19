@@ -56,7 +56,7 @@ namespace Code.Services.Concrete
             
             _cachedLevelModels[levelIndex].Unlocked = true;
 
-            SaveCachedLevels();
+            SaveCachedLevels().Forget();
         }
 
         public ILevelModel GetLevelModelFromCache(int levelIndex)
@@ -66,7 +66,7 @@ namespace Code.Services.Concrete
         {
             _cachedLevelModels[levelIndex].BestCompletionTime = bestCompletionTime;
 
-            SaveCachedLevels();
+            SaveCachedLevels().Forget();
         }
 
         private async Task SaveCachedLevels()
