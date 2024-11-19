@@ -41,6 +41,7 @@ namespace Code.Services.ServiceLocator
             InstallLevelFinishedService();
             InstallLevelFailedService();
             InstallLevelModelsService();
+            InstallStartMenuSceneService();
         }
 
         private static void InstallTickService()
@@ -60,5 +61,8 @@ namespace Code.Services.ServiceLocator
 
         private static void InstallLevelModelsService()
             => Register<ILevelModelsService>(() => new LevelModelsService(Get<ILevelScenesService>()));
+
+        private static void InstallStartMenuSceneService()
+            => Register<IStartMenuSceneService>(() => new StartMenuSceneService());
     }
 }

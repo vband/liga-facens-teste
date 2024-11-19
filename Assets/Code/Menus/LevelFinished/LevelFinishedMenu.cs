@@ -12,10 +12,12 @@ namespace Code.Menus.LevelFinished
         [SerializeField] private PostLevelView _postLevelView;
         [SerializeField] private Button _nextLevelButton;
         [SerializeField] private Button _restartLevelButton;
+        [SerializeField] private Button _startMenuButton;
 
         private ILevelFinishedService _levelFinishedService;
         private ILevelScenesService _levelScenesService;
         private ILevelModelsService _levelModelsService;
+        private IStartMenuSceneService _startMenuSceneService;
 
         private void Start()
         {
@@ -24,11 +26,13 @@ namespace Code.Menus.LevelFinished
             _levelFinishedService = ServiceLocator.Get<ILevelFinishedService>();
             _levelScenesService = ServiceLocator.Get<ILevelScenesService>();
             _levelModelsService = ServiceLocator.Get<ILevelModelsService>();
+            _startMenuSceneService = ServiceLocator.Get<IStartMenuSceneService>();
             
             _levelFinishedService.OnLevelFinished += OpenMenu;
             
             _nextLevelButton.onClick.AddListener(GoToNextLevel);
             _restartLevelButton.onClick.AddListener(RestartLevel);
+            _startMenuButton.onClick.AddListener(GoToStartMenu);
 
             _nextLevelButton.interactable = !_levelScenesService.IsLastLevel;
         }
@@ -51,6 +55,9 @@ namespace Code.Menus.LevelFinished
 
         private void RestartLevel()
             => _levelScenesService.RestartCurrentLevel();
+
+        private void GoToStartMenu()
+            => _startMenuSceneService.LoadStartMenu();
 
         private void OnDestroy()
         {

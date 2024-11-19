@@ -11,16 +11,16 @@ namespace Code.Services.Concrete
     {
         private const string LevelsPath = "Levels";
 
-        public IReadOnlyList<ILevelSceneModel> LevelScenes => _levels;
+        public IReadOnlyList<ISceneModel> LevelScenes => _levels;
 
         public bool IsLastLevel => CurrentLevelIndex == _levels.Length - 1;
         public int CurrentLevelIndex { get; private set; }
 
-        private readonly ILevelSceneModel[] _levels;
+        private readonly ISceneModel[] _levels;
 
         public LevelScenesService()
         {
-            _levels = Resources.LoadAll<LevelSceneModelSo>(LevelsPath);
+            _levels = Resources.LoadAll<SceneModelSo>(LevelsPath);
         }
         
         public void LoadNextLevel()
@@ -33,7 +33,7 @@ namespace Code.Services.Concrete
         }
 
         public void RestartCurrentLevel()
-            => SceneManager.LoadSceneAsync(_levels[CurrentLevelIndex].LevelSceneName);
+            => SceneManager.LoadSceneAsync(_levels[CurrentLevelIndex].SceneName);
 
         public void LoadLevel(int levelIndex)
         {
