@@ -11,5 +11,6 @@ namespace Code.Services.Abstraction
         void LoadLevel(int levelIndex);
         void LoadNextLevel();
         void RestartCurrentLevel();
+        void NotifyLevelSkip(int currentLevelIndex);
     }
 }

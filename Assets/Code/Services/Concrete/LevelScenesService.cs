@@ -35,6 +35,9 @@ namespace Code.Services.Concrete
         public void RestartCurrentLevel()
             => SceneManager.LoadSceneAsync(_levels[CurrentLevelIndex].SceneName);
 
+        public void NotifyLevelSkip(int currentLevelIndex)
+            => CurrentLevelIndex = currentLevelIndex;
+
         public void LoadLevel(int levelIndex)
         {
             CurrentLevelIndex = levelIndex;
