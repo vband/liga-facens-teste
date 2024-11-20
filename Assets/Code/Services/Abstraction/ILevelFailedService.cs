@@ -4,7 +4,7 @@ namespace Code.Services.Abstraction
 {
     public interface ILevelFailedService : IService
     {
-        event Action OnLevelFailed;
+        event Action<int> OnLevelFailed;
         void InvokeLevelFailed();
     }
 }

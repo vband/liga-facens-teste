@@ -43,6 +43,7 @@ namespace Code.Services.ServiceLocator
             InstallLevelModelsService();
             InstallStartMenuSceneService();
             InstallAdsService();
+            InstallAnalyticsService();
         }
 
         private static void InstallTickService()
@@ -55,10 +56,10 @@ namespace Code.Services.ServiceLocator
             => Register<ILevelSelectionMenuService>(() => new LevelSelectionMenuService());
 
         private static void InstallLevelFinishedService()
-            => Register<ILevelFinishedService>(() => new LevelFinishedService());
+            => Register<ILevelFinishedService>(() => new LevelFinishedService(Get<ILevelScenesService>()));
 
         private static void InstallLevelFailedService()
-            => Register<ILevelFailedService>(() => new LevelFailedService());
+            => Register<ILevelFailedService>(() => new LevelFailedService(Get<ILevelScenesService>()));
 
         private static void InstallLevelModelsService()
             => Register<ILevelModelsService>(() => new LevelModelsService(Get<ILevelScenesService>()));
@@ -68,5 +69,9 @@ namespace Code.Services.ServiceLocator
 
         private static void InstallAdsService()
             => Register<IAdsService>(() => new UnityAdsService());
+
+        private static void InstallAnalyticsService()
+            => Register<IAnalyticsService>(() =>
+                new UnityAnalyticsService(Get<ILevelFinishedService>(), Get<ILevelFailedService>()), true);
     }
 }
