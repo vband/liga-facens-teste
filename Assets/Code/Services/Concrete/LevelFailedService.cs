@@ -1,6 +1,7 @@
 ﻿using System;
 using Code.Actors.Abstraction;
 using Code.Actors.Concrete;
+using Code.Behaviours.Abstraction;
 using Code.Services.Abstraction;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -25,8 +26,11 @@ namespace Code.Services.Concrete
 
             if (_playerKillableActor == null)
                 return;
+
+            if (!_playerKillableActor.TryGetBehaviour<IKillableBehaviour>(out var killableBehaviour))
+                return;
             
-            _playerKillableActor.KillableBehaviour.OnDeathNotification += InvokeLevelFailed;
+            killableBehaviour.OnDeathNotification += InvokeLevelFailed;
         }
 
         public void InvokeLevelFailed()

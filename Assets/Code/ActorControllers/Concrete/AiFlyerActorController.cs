@@ -1,5 +1,6 @@
 ﻿using Code.ActorControllers.Abstraction;
 using Code.Actors.Abstraction;
+using Code.Behaviours.Abstraction;
 using Code.Services.Abstraction;
 using UnityEngine;
 
@@ -7,22 +8,24 @@ namespace Code.ActorControllers.Concrete
 {
     public class AiFlyerActorController : IActorController
     {
-        private readonly IFlyerActor _actor;
+        private readonly IFlyBehaviour _actorFlyBehaviour;
         private readonly ITickService _tickService;
         private readonly FlyMovementData _horizontalMovementData;
         private readonly FlyMovementData _verticalMovementData;
+        private readonly float _horizontalMaxSpeed;
+        private readonly float _verticalMaxSpeed;
 
         private bool _isEnabled;
-        private float _horizontalMaxSpeed;
-        private float _verticalMaxSpeed;
         private float _currentHorizontalMovementTime;
         private float _currentVerticalMovementTime;
         private Vector2 _lastPos;
 
-        public AiFlyerActorController(IFlyerActor actor, ITickService tickService, FlyMovementData horizontalMovementData,
+        public AiFlyerActorController(IActor actor, ITickService tickService, FlyMovementData horizontalMovementData,
             FlyMovementData verticalMovementData)
         {
-            _actor = actor;
+            if (!actor.TryGetBehaviour(out _actorFlyBehaviour))
+                return;
+            
             _tickService = tickService;
             _horizontalMovementData = horizontalMovementData;
             _verticalMovementData = verticalMovementData;
@@ -56,7 +59,7 @@ namespace Code.ActorControllers.Concrete
                 delta.x / (_horizontalMaxSpeed * Time.deltaTime),
                 delta.y / (_verticalMaxSpeed * Time.deltaTime));
             
-            _actor.UpdateMovement(axis);
+            _actorFlyBehaviour.UpdateMovement(axis);
             
             _lastPos = newPos;
             
@@ -92,7 +95,7 @@ namespace Code.ActorControllers.Concrete
             _isEnabled = enabled;
             
             if (!_isEnabled)
-                _actor.UpdateMovement(Vector2.zero);
+                _actorFlyBehaviour.UpdateMovement(Vector2.zero);
         }
     }
 

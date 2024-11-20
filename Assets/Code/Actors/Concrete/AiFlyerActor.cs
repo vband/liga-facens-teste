@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class AiFlyerActor : ControllableActor, IFlyerActor
+    public class AiFlyerActor : ControllableActor
     {
         [SerializeField] private CollisionObserver _killTriggerObserver;
         [SerializeField] private FlyMovementData _horizontalMovementData;
@@ -23,8 +23,10 @@ namespace Code.Actors.Concrete
             _flyBehaviour = new FlyBehaviour(transform,
                 _horizontalMovementData.CurveAmplitude / _horizontalMovementData.CurveDuration,
                 _verticalMovementData.CurveAmplitude / _verticalMovementData.CurveDuration);
+            TryAddBehaviour(_flyBehaviour);
             
             _killBehaviour = new KillBehaviour();
+            TryAddBehaviour(_killBehaviour);
             
             _killTriggerObserver.OnTriggerEnter += OnKillTriggerEnter;
         }
@@ -37,17 +39,17 @@ namespace Code.Actors.Concrete
             _controller.SetEnabled(true);
         }
 
-        public void UpdateMovement(Vector2 axis)
-            => _flyBehaviour.UpdateMovement(axis);
-
         private void OnKillTriggerEnter(GameObject go)
         {
-            var killableActor = go.GetComponentInParent<KillableActor>();
+            var actor = go.GetComponentInParent<BaseActor>();
 
-            if (killableActor == null)
+            if (actor == null)
+                return;
+
+            if (!actor.TryGetBehaviour<IKillableBehaviour>(out var killableBehaviour))
                 return;
             
-            _killBehaviour.Kill(killableActor.KillableBehaviour);
+            _killBehaviour.Kill(killableBehaviour);
         }
 
         protected override void DisposeBehaviours()

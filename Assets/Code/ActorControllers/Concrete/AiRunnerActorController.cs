@@ -1,5 +1,6 @@
 ﻿using Code.ActorControllers.Abstraction;
 using Code.Actors.Abstraction;
+using Code.Behaviours.Abstraction;
 using Code.Services.Abstraction;
 using UnityEngine;
 
@@ -8,8 +9,8 @@ namespace Code.ActorControllers.Concrete
     public class AiRunnerActorController : IActorController
     {
         private const float Epsilon = 0.1f;
-        
-        private readonly IRunnerActor _actor;
+
+        private readonly IRunBehaviour _actorRunBehaviour;
         private readonly ITickService _tickService;
         private readonly float _movementWidth;
 
@@ -19,10 +20,12 @@ namespace Code.ActorControllers.Concrete
         private Bounds _movementBounds;
         private int _currentMovementDirection = 1;
         
-        public AiRunnerActorController(IRunnerActor actor, ITickService tickService, float movementWidth,
+        public AiRunnerActorController(IActor actor, ITickService tickService, float movementWidth,
             bool flipInitialDirection)
         {
-            _actor = actor;
+            if (!actor.TryGetBehaviour(out _actorRunBehaviour))
+                return;
+            
             _tickService = tickService;
             _movementWidth = movementWidth;
 
@@ -46,23 +49,23 @@ namespace Code.ActorControllers.Concrete
                 _currentMovementDirection *= -1;
             }
             
-            _actor.UpdateMovement(_currentMovementDirection);
+            _actorRunBehaviour.UpdateMovement(_currentMovementDirection);
         }
 
         private bool HasReachedBoundsLimit()
-            => _actor.HorizontalPos  <= _movementBounds.min.x || _actor.HorizontalPos >= _movementBounds.max.x;
+            => _actorRunBehaviour.HorizontalPos <= _movementBounds.min.x || _actorRunBehaviour.HorizontalPos >= _movementBounds.max.x;
 
         private void SnapPositionInsideBounds()
         {
-            if (_actor.HorizontalPos > _movementBounds.center.x)
-                _actor.SnapHorizontalPos(_movementBounds.max.x - Epsilon);
+            if (_actorRunBehaviour.HorizontalPos > _movementBounds.center.x)
+                _actorRunBehaviour.SnapHorizontalPos(_movementBounds.max.x - Epsilon);
             else
-                _actor.SnapHorizontalPos(_movementBounds.min.x + Epsilon);
+                _actorRunBehaviour.SnapHorizontalPos(_movementBounds.min.x + Epsilon);
         }
 
         private Bounds CalculateBounds()
         {
-            var initialPos = _actor.HorizontalPos;
+            var initialPos = _actorRunBehaviour.HorizontalPos;
             var center = new Vector3(initialPos, 0, 0);
             var size = new Vector3(_movementWidth, 0, 0);
             
@@ -81,7 +84,7 @@ namespace Code.ActorControllers.Concrete
             _isEnabled = enabled;
             
             if (!_isEnabled)
-                _actor.UpdateMovement(0);
+                _actorRunBehaviour.UpdateMovement(0);
         }
     }
 }

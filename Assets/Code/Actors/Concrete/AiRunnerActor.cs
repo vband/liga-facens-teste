@@ -11,10 +11,8 @@ using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class AiRunnerActor : BounceableActor, IRunnerActor
+    public class AiRunnerActor : BounceableActor
     {
-        public float HorizontalPos => transform.position.x;
-        
         [SerializeField] protected Animator _animator;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private CollisionObserver _killTriggerObserver;
@@ -33,8 +31,12 @@ namespace Code.Actors.Concrete
             var tickService = ServiceLocator.Get<ITickService>();
             
             _runBehaviour = new RunBehaviour(_rigidbody2D, _horizontalSpeed);
-            _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, tickService);
+            TryAddBehaviour(_runBehaviour);
+            
             _killBehaviour = new KillBehaviour();
+            TryAddBehaviour(_killBehaviour);
+            
+            _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, tickService);
             
             _killTriggerObserver.OnTriggerEnter += OnKillTriggerEnter;
         }
@@ -46,20 +48,17 @@ namespace Code.Actors.Concrete
             _controller.SetEnabled(true);
         }
 
-        public void UpdateMovement(float axis)
-            => _runBehaviour.UpdateMovement(axis);
-
-        public void SnapHorizontalPos(float targetHorizontalPos)
-            => transform.position = new Vector3(targetHorizontalPos, transform.position.y, transform.position.z);
-
         private void OnKillTriggerEnter(GameObject go)
         {
-            var killableActor = go.GetComponentInParent<KillableActor>();
+            var actor = go.GetComponentInParent<BaseActor>();
 
-            if (killableActor == null)
+            if (actor == null)
+                return;
+
+            if (!actor.TryGetBehaviour<IKillableBehaviour>(out var killableBehaviour))
                 return;
             
-            _killBehaviour.Kill(killableActor.KillableBehaviour);
+            _killBehaviour.Kill(killableBehaviour);
         }
 
         protected override void DisposeBehaviours()

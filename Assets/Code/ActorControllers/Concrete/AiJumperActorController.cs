@@ -1,5 +1,6 @@
 ﻿using Code.ActorControllers.Abstraction;
 using Code.Actors.Abstraction;
+using Code.Behaviours.Abstraction;
 using Code.Services.Abstraction;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Code.ActorControllers.Concrete
 {
     public class AiJumperActorController : IActorController
     {
-        private readonly IJumperActor _actor;
+        private readonly IJumpBehaviour _actorJumpBehaviour;
         private readonly ITickService _tickService;
         private readonly float _jumpTimeInterval;
         private readonly float _initialWaitTime;
@@ -17,10 +18,12 @@ namespace Code.ActorControllers.Concrete
         private float _currentWaitTime;
         private bool _isUnderInitialWaitTime = true;
         
-        public AiJumperActorController(IJumperActor actor, ITickService tickService, float jumpTimeInterval,
+        public AiJumperActorController(IActor actor, ITickService tickService, float jumpTimeInterval,
             float initialWaitTime)
         {
-            _actor = actor;
+            if (!actor.TryGetBehaviour(out _actorJumpBehaviour))
+                return;
+            
             _tickService = tickService;
             _jumpTimeInterval = jumpTimeInterval;
             _initialWaitTime = initialWaitTime;
@@ -47,10 +50,10 @@ namespace Code.ActorControllers.Concrete
             }
             
             if (Time.time - _jumpStartTime < _jumpTimeInterval)
-                _actor.UpdateJump(true);
+                _actorJumpBehaviour.UpdateJump(true);
             else
             {
-                _actor.UpdateJump(false);
+                _actorJumpBehaviour.UpdateJump(false);
                 _jumpStartTime = Time.time;
             }
         }
@@ -65,7 +68,7 @@ namespace Code.ActorControllers.Concrete
             _isEnabled = enabled;
             
             if (!_isEnabled)
-                _actor.UpdateJump(false);
+                _actorJumpBehaviour.UpdateJump(false);
         }
     }
 }

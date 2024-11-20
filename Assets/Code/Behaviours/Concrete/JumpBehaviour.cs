@@ -15,6 +15,7 @@ namespace Code.Behaviours.Concrete
         private readonly WaitForEndOfFrame _waitForEndOfFrame;
 
         private bool _isJumping;
+        protected bool _isGrounded;
         private float _jumpStartTime;
         private Coroutine _jumpCoroutine;
 
@@ -28,9 +29,9 @@ namespace Code.Behaviours.Concrete
             _waitForEndOfFrame = new WaitForEndOfFrame();
         }
 
-        public void UpdateJump(bool jumping, bool isGrounded)
+        public void UpdateJump(bool jumping)
         {
-            if (ShouldStartJump(jumping, isGrounded))
+            if (ShouldStartJump(jumping, _isGrounded))
                 StartJumpCoroutine();
             
             if (ShouldCancelJump(jumping))
@@ -38,6 +39,9 @@ namespace Code.Behaviours.Concrete
 
             _isJumping = jumping;
         }
+
+        public void SetGrounded(bool grounded)
+            => _isGrounded = grounded;
 
         private bool ShouldStartJump(bool jumping, bool isGrounded)
             => !_isJumping && jumping && isGrounded && _jumpCoroutine == null;

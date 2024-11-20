@@ -15,18 +15,22 @@ namespace Code.Actors.Concrete
         protected override void InitBehaviours()
         {
             _killBehaviour = new KillBehaviour();
+            TryAddBehaviour(_killBehaviour);
 
             _killTriggerObserver.OnTriggerEnter += OnKillTriggerEnter;
         }
 
         private void OnKillTriggerEnter(GameObject go)
         {
-            var killableActor = go.GetComponentInParent<KillableActor>();
+            var actor = go.GetComponentInParent<BaseActor>();
 
-            if (killableActor == null)
+            if (actor == null)
+                return;
+
+            if (!actor.TryGetBehaviour<IKillableBehaviour>(out var killableBehaviour))
                 return;
             
-            _killBehaviour.Kill(killableActor.KillableBehaviour);
+            _killBehaviour.Kill(killableBehaviour);
         }
 
         protected override void DisposeBehaviours()

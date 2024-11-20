@@ -21,6 +21,8 @@ namespace Code.Actors.Concrete
         protected override void InitBehaviours()
         {
             _bounceBehaviour = new BounceBehaviour(_bounceVerticalVelocity, _bounceDuration, this);
+            TryAddBehaviour(_bounceBehaviour);
+            
             _bounceBehaviourVisual = new BounceBehaviourVisual(_animator, _bounceBehaviour);
 
             _bounceTriggerObserver.OnTriggerEnter += OnBounceTriggerEnter;
@@ -28,12 +30,15 @@ namespace Code.Actors.Concrete
 
         private void OnBounceTriggerEnter(GameObject go)
         {
-            var bounceableActor = go.GetComponentInParent<BounceableActor>();
+            var actor = go.GetComponentInParent<BaseActor>();
             
-            if (bounceableActor == null)
+            if (actor == null)
+                return;
+
+            if (!actor.TryGetBehaviour<IBounceableBehaviour>(out var bounceableBehaviour))
                 return;
             
-            _bounceBehaviour.Bounce(bounceableActor.BounceableBehaviour);
+            _bounceBehaviour.Bounce(bounceableBehaviour);
         }
 
         protected override void DisposeBehaviours()

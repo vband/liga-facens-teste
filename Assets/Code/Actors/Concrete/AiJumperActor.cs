@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class AiJumperActor : BounceableActor, IJumperActor
+    public class AiJumperActor : BounceableActor
     {
         [SerializeField] private Animator _animator;
         [SerializeField] private CollisionObserver _groundTriggerObserver;
@@ -33,16 +33,24 @@ namespace Code.Actors.Concrete
             var tickService = ServiceLocator.Get<ITickService>();
             
             _jumpBehaviour = new JumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
+            TryAddBehaviour(_jumpBehaviour);
+            
             _groundCheckBehaviour = new GroundCheckBehaviour();
-            _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, tickService);
+            TryAddBehaviour(_groundCheckBehaviour);
+            
             _killBehaviour = new KillBehaviour();
+            TryAddBehaviour(_killBehaviour);
+            
+            _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, tickService);
 
             _groundTriggerObserver.OnTriggerEnter += OnGroundTriggerEnter;
             _groundTriggerObserver.OnTriggerExit += OnGroundTriggerExit;
 
+            _groundCheckBehaviour.OnGroundedStateChanged += OnGroundedStateChanged;
+
             _killTriggerObserver.OnTriggerEnter += OnKillTriggerEnter;
         }
-        
+
         protected override void BindController()
         {
             var tickService = ServiceLocator.Get<ITickService>();
@@ -50,9 +58,6 @@ namespace Code.Actors.Concrete
             _controller = new AiJumperActorController(this, tickService, _jumpTimeInterval, _initialWaitTime);
             _controller.SetEnabled(true);
         }
-        
-        public void UpdateJump(bool jumping)
-            => _jumpBehaviour.UpdateJump(jumping, _groundCheckBehaviour.IsGrounded);
 
         private void OnGroundTriggerEnter(GameObject go)
             => _groundCheckBehaviour.OnNewContact(go);
@@ -60,14 +65,20 @@ namespace Code.Actors.Concrete
         private void OnGroundTriggerExit(GameObject go)
             => _groundCheckBehaviour.OnLoseContact(go);
 
+        private void OnGroundedStateChanged(bool grounded)
+            => _jumpBehaviour.SetGrounded(grounded);
+
         private void OnKillTriggerEnter(GameObject go)
         {
-            var killableActor = go.GetComponentInParent<KillableActor>();
+            var actor = go.GetComponentInParent<BaseActor>();
 
-            if (killableActor == null)
+            if (actor == null)
+                return;
+
+            if (!actor.TryGetBehaviour<IKillableBehaviour>(out var killableBehaviour))
                 return;
             
-            _killBehaviour.Kill(killableActor.KillableBehaviour);
+            _killBehaviour.Kill(killableBehaviour);
         }
 
         protected override void DisposeBehaviours()
@@ -77,6 +88,8 @@ namespace Code.Actors.Concrete
             _groundTriggerObserver.OnTriggerEnter -= OnGroundTriggerEnter;
             _groundTriggerObserver.OnTriggerExit -= OnGroundTriggerExit;
             
+            _groundCheckBehaviour.OnGroundedStateChanged += OnGroundedStateChanged;
+
             _killTriggerObserver.OnTriggerEnter -= OnKillTriggerEnter;
         }
     }

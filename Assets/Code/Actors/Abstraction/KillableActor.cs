@@ -8,20 +8,20 @@ namespace Code.Actors.Abstraction
 {
     public abstract class KillableActor : BounceableActor
     {
-        public IKillableBehaviour KillableBehaviour { get; private set; }
-
         [SerializeField] protected Animator _animator;
         [SerializeField] private float _waitTimeBeforeDeathNotification;
-        
+
+        protected IKillableBehaviour _killableBehaviour;
         private IKillableBehaviourVisual _killableBehaviourVisual;
 
         protected override void InitBehaviours()
         {
             base.InitBehaviours();
-            KillableBehaviour = new KillableBehaviour(this, _waitTimeBeforeDeathNotification);
-            _killableBehaviourVisual = new KillableBehaviourVisual(_animator, KillableBehaviour);
+            _killableBehaviour = new KillableBehaviour(this, _waitTimeBeforeDeathNotification);
+            TryAddBehaviour(_killableBehaviour);
+            _killableBehaviourVisual = new KillableBehaviourVisual(_animator, _killableBehaviour);
 
-            KillableBehaviour.OnDied += RigidbodySleep;
+            _killableBehaviour.OnDied += RigidbodySleep;
         }
 
         private void RigidbodySleep()
@@ -30,7 +30,7 @@ namespace Code.Actors.Abstraction
         protected override void DisposeBehaviours()
         {
             _killableBehaviourVisual.Dispose();
-            KillableBehaviour.OnDied -= RigidbodySleep;
+            _killableBehaviour.OnDied -= RigidbodySleep;
         }
     }
 }

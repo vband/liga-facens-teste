@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Code.Actors.Concrete;
+using Code.Behaviours.Abstraction;
 using UnityEngine;
 
 namespace Code.Cinemachine
@@ -15,7 +16,10 @@ namespace Code.Cinemachine
             if (playerActor == null)
                 return;
 
-            playerActor.KillableBehaviour.OnDied += OnPlayerDied;
+            if (!playerActor.TryGetBehaviour<IKillableBehaviour>(out var killableBehaviour))
+                return;
+
+            killableBehaviour.OnDied += OnPlayerDied;
         }
 
         private void OnPlayerDied()

@@ -11,10 +11,8 @@ using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class PlayerActor : KillableActor, IRunnerJumperActor
+    public class PlayerActor : KillableActor
     {
-        public float HorizontalPos => transform.position.x;
-
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private CollisionObserver _groundTriggerObserver;
         [SerializeField] private float _horizontalSpeed;
@@ -34,14 +32,23 @@ namespace Code.Actors.Concrete
             var tickService = ServiceLocator.Get<ITickService>();
             
             _runBehaviour = new RunBehaviour(_rigidbody2D, _horizontalSpeed);
-            _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, tickService);
+            TryAddBehaviour(_runBehaviour);
+            
             _jumpBehaviour = new JumpBehaviour(_rigidbody2D, this, _jumpVelocity, _jumpMaxDuration);
+            TryAddBehaviour(_jumpBehaviour);
+            
             _groundCheckBehaviour = new GroundCheckBehaviour();
+            TryAddBehaviour(_groundCheckBehaviour);
+            
+            _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, tickService);
             _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, tickService);
 
             _groundTriggerObserver.OnTriggerEnter += OnGroundTriggerEnter;
             _groundTriggerObserver.OnTriggerExit += OnGroundTriggerExit;
-            KillableBehaviour.OnDied += DisableBounceableBehaviour;
+
+            _groundCheckBehaviour.OnGroundedStateChanged += OnGroundedStateChanged;
+            
+            _killableBehaviour.OnDied += DisableBounceableBehaviour;
         }
 
         protected override void BindController()
@@ -52,23 +59,17 @@ namespace Code.Actors.Concrete
             _controller.SetEnabled(true);
         }
 
-        public void UpdateMovement(float axis)
-            => _runBehaviour.UpdateMovement(axis);
-
-        public void SnapHorizontalPos(float targetHorizontalPos)
-            => transform.position = new Vector3(targetHorizontalPos, transform.position.y, transform.position.z);
-
-        public void UpdateJump(bool jumping)
-            => _jumpBehaviour.UpdateJump(jumping, _groundCheckBehaviour.IsGrounded);
-
         private void DisableBounceableBehaviour()
-            => BounceableBehaviour.Enabled = false;
+            => _bounceableBehaviour.Enabled = false;
 
         private void OnGroundTriggerEnter(GameObject go)
             => _groundCheckBehaviour.OnNewContact(go);
 
         private void OnGroundTriggerExit(GameObject go)
             => _groundCheckBehaviour.OnLoseContact(go);
+
+        private void OnGroundedStateChanged(bool grounded)
+            => _jumpBehaviour.SetGrounded(grounded);
 
         protected override void DisposeBehaviours()
         {
@@ -79,7 +80,8 @@ namespace Code.Actors.Concrete
             
             _groundTriggerObserver.OnTriggerEnter -= OnGroundTriggerEnter;
             _groundTriggerObserver.OnTriggerExit -= OnGroundTriggerExit;
-            KillableBehaviour.OnDied -= DisableBounceableBehaviour;
+            _groundCheckBehaviour.OnGroundedStateChanged += OnGroundedStateChanged;
+            _killableBehaviour.OnDied -= DisableBounceableBehaviour;
         }
     }
 }
