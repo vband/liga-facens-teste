@@ -39,7 +39,7 @@ namespace Code.Menus.LevelFinished
             _nextLevelButton.interactable = !_levelScenesService.IsLastLevel;
         }
 
-        private void OpenMenu()
+        private void OpenMenu(int _)
         {
             _canvas.SetActive(true);
             UpdatePostLevelView();

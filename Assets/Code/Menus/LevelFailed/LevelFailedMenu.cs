@@ -31,7 +31,7 @@ namespace Code.Menus.LevelFailed
             _startMenuButton.onClick.AddListener(GoToStartMenuAfterAd);
         }
 
-        private void OpenMenu()
+        private void OpenMenu(int _)
             => _canvas.SetActive(true);
 
         private void RestartLevelAfterAd()

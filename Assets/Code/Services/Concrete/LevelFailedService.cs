@@ -10,12 +10,16 @@ namespace Code.Services.Concrete
 {
     public class LevelFailedService : ILevelFailedService
     {
-        public event Action OnLevelFailed;
+        public event Action<int> OnLevelFailed;
+
+        private readonly ILevelScenesService _levelScenesService;
 
         private KillableActor _playerKillableActor;
 
-        public LevelFailedService()
+        public LevelFailedService(ILevelScenesService levelScenesService)
         {
+            _levelScenesService = levelScenesService;
+            
             BindPlayerKillableActor();
             SceneManager.sceneLoaded += (_, _) => BindPlayerKillableActor();
         }
@@ -34,6 +38,6 @@ namespace Code.Services.Concrete
         }
 
         public void InvokeLevelFailed()
-            => OnLevelFailed?.Invoke();
+            => OnLevelFailed?.Invoke(_levelScenesService.CurrentLevelIndex);
     }
 }

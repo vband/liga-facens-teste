@@ -5,9 +5,16 @@ namespace Code.Services.Concrete
 {
     public class LevelFinishedService : ILevelFinishedService
     {
-        public event Action OnLevelFinished;
+        public event Action<int> OnLevelFinished;
+
+        private readonly ILevelScenesService _levelScenesService;
+
+        public LevelFinishedService(ILevelScenesService levelScenesService)
+        {
+            _levelScenesService = levelScenesService;
+        }
 
         public void InvokeLevelFinished()
-            => OnLevelFinished?.Invoke();
+            => OnLevelFinished?.Invoke(_levelScenesService.CurrentLevelIndex);
     }
 }

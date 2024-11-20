@@ -59,13 +59,13 @@ namespace Code.CompletionTimeTracker
         private void StopTimer()
             => _isTracking = false;
 
-        private void OnLevelFinished()
+        private void OnLevelFinished(int _)
         {
             StopTimer();
             UpdateBestCompletionTimeIfNeeded();
         }
 
-        private void OnLevelFailed()
+        private void OnLevelFailed(int _)
             => StopTimer();
 
         private void UpdateBestCompletionTimeIfNeeded()
