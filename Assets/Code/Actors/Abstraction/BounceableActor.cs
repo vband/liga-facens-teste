@@ -5,11 +5,15 @@ namespace Code.Actors.Abstraction
 {
     public abstract class BounceableActor : ControllableActor
     {
-        public IBounceableBehaviour BounceableBehaviour { get; private set; }
-
+        private IBounceableBehaviour _bounceableBehaviour;
+        
         protected override void InitBehaviours()
         {
-            BounceableBehaviour = new BounceableBehaviour(_rigidbody2D);
+            _bounceableBehaviour = new BounceableBehaviour(_rigidbody2D);
+            TryAddBehaviour(_bounceableBehaviour);
         }
+
+        protected void SetBounceableBehaviourActive(bool active)
+            => _bounceableBehaviour.Enabled = active;
     }
 }

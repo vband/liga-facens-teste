@@ -1,5 +1,6 @@
 using Code.ActorControllers.Abstraction;
 using Code.Actors.Abstraction;
+using Code.Behaviours.Abstraction;
 using Code.Services.Abstraction;
 using UnityEngine.InputSystem;
 
@@ -8,15 +9,19 @@ namespace Code.ActorControllers.Concrete
     public class InputActorController : IActorController
     {
         private readonly PlayerInputActions _playerInputActions;
-        private readonly IRunnerJumperActor _actor;
+        private readonly IRunBehaviour _actorRunBehaviour;
+        private readonly IJumpBehaviour _actorJumpBehaviour;
         private readonly ITickService _tickService;
 
         private float _movementAxis;
         private bool _jumping;
 
-        public InputActorController(IRunnerJumperActor actor, ITickService tickService)
+        public InputActorController(IActor actor, ITickService tickService)
         {
-            _actor = actor;
+            if (!actor.TryGetBehaviour(out _actorRunBehaviour)
+                || !actor.TryGetBehaviour(out _actorJumpBehaviour))
+                return;
+            
             _tickService = tickService;
             _playerInputActions = new PlayerInputActions();
 
@@ -33,8 +38,8 @@ namespace Code.ActorControllers.Concrete
                 _playerInputActions.Enable();
             else
             {
-                _actor.UpdateMovement(0);
-                _actor.UpdateJump(false);
+                _actorRunBehaviour.UpdateMovement(0);
+                _actorJumpBehaviour.UpdateJump(false);
                 _playerInputActions.Disable();
             }
         }
@@ -64,8 +69,8 @@ namespace Code.ActorControllers.Concrete
 
         private void OnTick()
         {
-            _actor.UpdateMovement(_movementAxis);
-            _actor.UpdateJump(_jumping);
+            _actorRunBehaviour.UpdateMovement(_movementAxis);
+            _actorJumpBehaviour.UpdateJump(_jumping);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Code.Actors.Concrete;
+using Code.Behaviours.Abstraction;
 using UnityEngine;
 
 namespace Code.Effects.ScreenFlash
@@ -14,7 +15,10 @@ namespace Code.Effects.ScreenFlash
             if (playerActor == null)
                 return;
 
-            playerActor.KillableBehaviour.OnDied += FlashScreen;
+            if (!playerActor.TryGetBehaviour<IKillableBehaviour>(out var killableBehaviour))
+                return;
+
+            killableBehaviour.OnDied += FlashScreen;
         }
 
         private void FlashScreen()

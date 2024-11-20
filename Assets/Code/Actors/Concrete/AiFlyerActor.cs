@@ -4,29 +4,25 @@ using Code.Behaviours.Abstraction;
 using Code.Behaviours.Concrete;
 using Code.Services.Abstraction;
 using Code.Services.ServiceLocator;
-using Code.Utils;
 using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class AiFlyerActor : ControllableActor, IFlyerActor
+    public class AiFlyerActor : KillerActor
     {
-        [SerializeField] private CollisionObserver _killTriggerObserver;
         [SerializeField] private FlyMovementData _horizontalMovementData;
         [SerializeField] private FlyMovementData _verticalMovementData;
 
         private IFlyBehaviour _flyBehaviour;
-        private IKillBehaviour _killBehaviour;
         
         protected override void InitBehaviours()
         {
+            base.InitBehaviours();
+            
             _flyBehaviour = new FlyBehaviour(transform,
                 _horizontalMovementData.CurveAmplitude / _horizontalMovementData.CurveDuration,
                 _verticalMovementData.CurveAmplitude / _verticalMovementData.CurveDuration);
-            
-            _killBehaviour = new KillBehaviour();
-            
-            _killTriggerObserver.OnTriggerEnter += OnKillTriggerEnter;
+            TryAddBehaviour(_flyBehaviour);
         }
 
         protected override void BindController()
@@ -35,24 +31,6 @@ namespace Code.Actors.Concrete
 
             _controller = new AiFlyerActorController(this, tickService, _horizontalMovementData, _verticalMovementData);
             _controller.SetEnabled(true);
-        }
-
-        public void UpdateMovement(Vector2 axis)
-            => _flyBehaviour.UpdateMovement(axis);
-
-        private void OnKillTriggerEnter(GameObject go)
-        {
-            var killableActor = go.GetComponentInParent<KillableActor>();
-
-            if (killableActor == null)
-                return;
-            
-            _killBehaviour.Kill(killableActor.KillableBehaviour);
-        }
-
-        protected override void DisposeBehaviours()
-        {
-            _killTriggerObserver.OnTriggerEnter -= OnKillTriggerEnter;
         }
     }
 }

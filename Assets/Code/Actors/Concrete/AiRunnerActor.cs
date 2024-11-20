@@ -6,25 +6,19 @@ using Code.Behaviours.Visuals.Abstraction;
 using Code.Behaviours.Visuals.Concrete;
 using Code.Services.Abstraction;
 using Code.Services.ServiceLocator;
-using Code.Utils;
 using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class AiRunnerActor : BounceableActor, IRunnerActor
+    public class AiRunnerActor : KillerActor
     {
-        public float HorizontalPos => transform.position.x;
-        
-        [SerializeField] protected Animator _animator;
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private CollisionObserver _killTriggerObserver;
         [SerializeField] private float _horizontalSpeed;
         [SerializeField] private float _movementWidth;
         [SerializeField] private bool _flipInitialDirection;
         
         private IRunBehaviour _runBehaviour;
         private IRunBehaviourVisual _runBehaviourVisual;
-        private IKillBehaviour _killBehaviour;
 
         protected override void InitBehaviours()
         {
@@ -33,10 +27,9 @@ namespace Code.Actors.Concrete
             var tickService = ServiceLocator.Get<ITickService>();
             
             _runBehaviour = new RunBehaviour(_rigidbody2D, _horizontalSpeed);
-            _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, tickService);
-            _killBehaviour = new KillBehaviour();
+            TryAddBehaviour(_runBehaviour);
             
-            _killTriggerObserver.OnTriggerEnter += OnKillTriggerEnter;
+            _runBehaviourVisual = new RunBehaviourVisual(_animator, _spriteRenderer, _runBehaviour, tickService);
         }
         
         protected override void BindController()
@@ -46,27 +39,11 @@ namespace Code.Actors.Concrete
             _controller.SetEnabled(true);
         }
 
-        public void UpdateMovement(float axis)
-            => _runBehaviour.UpdateMovement(axis);
-
-        public void SnapHorizontalPos(float targetHorizontalPos)
-            => transform.position = new Vector3(targetHorizontalPos, transform.position.y, transform.position.z);
-
-        private void OnKillTriggerEnter(GameObject go)
-        {
-            var killableActor = go.GetComponentInParent<KillableActor>();
-
-            if (killableActor == null)
-                return;
-            
-            _killBehaviour.Kill(killableActor.KillableBehaviour);
-        }
-
         protected override void DisposeBehaviours()
         {
-            _runBehaviourVisual.Dispose();
+            base.DisposeBehaviours();
             
-            _killTriggerObserver.OnTriggerEnter -= OnKillTriggerEnter;
+            _runBehaviourVisual.Dispose();
         }
     }
 }

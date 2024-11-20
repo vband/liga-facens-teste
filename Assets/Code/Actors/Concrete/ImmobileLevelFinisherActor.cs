@@ -19,7 +19,9 @@ namespace Code.Actors.Concrete
             var levelFinishedMenuService = ServiceLocator.Get<ILevelFinishedService>();
             var levelScenesService = ServiceLocator.Get<ILevelScenesService>();
             var levelModelsService = ServiceLocator.Get<ILevelModelsService>();
+            
             _finishLevelBehaviour = new FinishLevelBehaviour(levelFinishedMenuService, levelScenesService, levelModelsService);
+            TryAddBehaviour(_finishLevelBehaviour);
 
             _finishLevelTriggerObserver.OnTriggerEnter += OnFinishLevelTriggerEnter;
         }

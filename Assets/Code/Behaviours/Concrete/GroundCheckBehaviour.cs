@@ -1,12 +1,15 @@
-﻿using Code.Behaviours.Abstraction;
+﻿using System;
+using Code.Behaviours.Abstraction;
 using UnityEngine;
 
 namespace Code.Behaviours.Concrete
 {
     public class GroundCheckBehaviour : IGroundCheckBehaviour
     {
-        private static readonly int _groundLayer = LayerMask.NameToLayer("Ground");
-        
+        private static readonly int _groundLayer = LayerMask.NameToLayer("GroundCollider");
+
+        public event Action<bool> OnGroundedStateChanged;
+
         public bool IsGrounded { get; private set; }
         
         public void OnNewContact(GameObject other)
@@ -15,6 +18,7 @@ namespace Code.Behaviours.Concrete
                 return;
             
             IsGrounded = true;
+            OnGroundedStateChanged?.Invoke(IsGrounded);
         }
 
         public void OnLoseContact(GameObject other)
@@ -23,6 +27,7 @@ namespace Code.Behaviours.Concrete
                 return;
             
             IsGrounded = false;
+            OnGroundedStateChanged?.Invoke(IsGrounded);
         }
 
         private static bool SameLayer(int layer1, int layer2)
