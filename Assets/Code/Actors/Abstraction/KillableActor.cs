@@ -11,26 +11,34 @@ namespace Code.Actors.Abstraction
         [SerializeField] protected Animator _animator;
         [SerializeField] private float _waitTimeBeforeDeathNotification;
 
-        protected IKillableBehaviour _killableBehaviour;
+        private IKillableBehaviour _killableBehaviour;
         private IKillableBehaviourVisual _killableBehaviourVisual;
 
         protected override void InitBehaviours()
         {
             base.InitBehaviours();
+            
             _killableBehaviour = new KillableBehaviour(this, _waitTimeBeforeDeathNotification);
             TryAddBehaviour(_killableBehaviour);
+            
             _killableBehaviourVisual = new KillableBehaviourVisual(_animator, _killableBehaviour);
 
             _killableBehaviour.OnDied += RigidbodySleep;
+            _killableBehaviour.OnDied += DisableBounceableBehaviour;
         }
 
         private void RigidbodySleep()
             => _rigidbody2D.Sleep();
 
+        private void DisableBounceableBehaviour()
+            => SetBounceableBehaviourActive(false);
+
         protected override void DisposeBehaviours()
         {
             _killableBehaviourVisual.Dispose();
+            
             _killableBehaviour.OnDied -= RigidbodySleep;
+            _killableBehaviour.OnDied -= DisableBounceableBehaviour;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Code.ActorControllers.Concrete
             
             _tickService = tickService;
             _jumpTimeInterval = jumpTimeInterval;
-            _initialWaitTime = initialWaitTime;
+            _initialWaitTime = Time.time + initialWaitTime;
             _currentWaitTime = Time.time;
 
             _tickService.OnTick += OnTick;

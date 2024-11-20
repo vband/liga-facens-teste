@@ -47,8 +47,6 @@ namespace Code.Actors.Concrete
             _groundTriggerObserver.OnTriggerExit += OnGroundTriggerExit;
 
             _groundCheckBehaviour.OnGroundedStateChanged += OnGroundedStateChanged;
-            
-            _killableBehaviour.OnDied += DisableBounceableBehaviour;
         }
 
         protected override void BindController()
@@ -58,9 +56,6 @@ namespace Code.Actors.Concrete
             _controller = new InputActorController(this, tickService);
             _controller.SetEnabled(true);
         }
-
-        private void DisableBounceableBehaviour()
-            => _bounceableBehaviour.Enabled = false;
 
         private void OnGroundTriggerEnter(GameObject go)
             => _groundCheckBehaviour.OnNewContact(go);
@@ -80,8 +75,8 @@ namespace Code.Actors.Concrete
             
             _groundTriggerObserver.OnTriggerEnter -= OnGroundTriggerEnter;
             _groundTriggerObserver.OnTriggerExit -= OnGroundTriggerExit;
+            
             _groundCheckBehaviour.OnGroundedStateChanged += OnGroundedStateChanged;
-            _killableBehaviour.OnDied -= DisableBounceableBehaviour;
         }
     }
 }

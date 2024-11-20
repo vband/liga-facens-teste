@@ -11,11 +11,9 @@ using UnityEngine;
 
 namespace Code.Actors.Concrete
 {
-    public class AiJumperActor : BounceableActor
+    public class AiJumperActor : KillerActor
     {
-        [SerializeField] private Animator _animator;
         [SerializeField] private CollisionObserver _groundTriggerObserver;
-        [SerializeField] private CollisionObserver _killTriggerObserver;
         [SerializeField] private float _jumpVelocity;
         [SerializeField] private float _jumpMaxDuration;
         [SerializeField] private float _jumpTimeInterval;
@@ -24,7 +22,6 @@ namespace Code.Actors.Concrete
         private IJumpBehaviour _jumpBehaviour;
         private IGroundCheckBehaviour _groundCheckBehaviour;
         private IJumpBehaviourVisual _jumpBehaviourVisual;
-        private IKillBehaviour _killBehaviour;
         
         protected override void InitBehaviours()
         {
@@ -38,17 +35,12 @@ namespace Code.Actors.Concrete
             _groundCheckBehaviour = new GroundCheckBehaviour();
             TryAddBehaviour(_groundCheckBehaviour);
             
-            _killBehaviour = new KillBehaviour();
-            TryAddBehaviour(_killBehaviour);
-            
             _jumpBehaviourVisual = new JumpBehaviourVisual(_animator, _jumpBehaviour, tickService);
 
             _groundTriggerObserver.OnTriggerEnter += OnGroundTriggerEnter;
             _groundTriggerObserver.OnTriggerExit += OnGroundTriggerExit;
 
             _groundCheckBehaviour.OnGroundedStateChanged += OnGroundedStateChanged;
-
-            _killTriggerObserver.OnTriggerEnter += OnKillTriggerEnter;
         }
 
         protected override void BindController()
@@ -68,29 +60,16 @@ namespace Code.Actors.Concrete
         private void OnGroundedStateChanged(bool grounded)
             => _jumpBehaviour.SetGrounded(grounded);
 
-        private void OnKillTriggerEnter(GameObject go)
-        {
-            var actor = go.GetComponentInParent<BaseActor>();
-
-            if (actor == null)
-                return;
-
-            if (!actor.TryGetBehaviour<IKillableBehaviour>(out var killableBehaviour))
-                return;
-            
-            _killBehaviour.Kill(killableBehaviour);
-        }
-
         protected override void DisposeBehaviours()
         {
+            base.DisposeBehaviours();
+            
             _jumpBehaviourVisual.Dispose();
             
             _groundTriggerObserver.OnTriggerEnter -= OnGroundTriggerEnter;
             _groundTriggerObserver.OnTriggerExit -= OnGroundTriggerExit;
             
             _groundCheckBehaviour.OnGroundedStateChanged += OnGroundedStateChanged;
-
-            _killTriggerObserver.OnTriggerEnter -= OnKillTriggerEnter;
         }
     }
 }
