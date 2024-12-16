@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - ActorCollider
+  - GroundCollider
+  - WorldCollider
+  - GroundCheckTrigger
+  - BouncerCollider
+  - BounceableTrigger
+  - KillerCollider
+  - KillableTrigger
+  - LevelFinisherCollider
+  - LevelFinishTrigger
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 825414475
+    locked: 0
+  - name: Water
+    uniqueID: 1302918213
+    locked: 0
+  - name: Ground
+    uniqueID: 3070340591
+    locked: 0
+  - name: Platforms
+    uniqueID: 1369146999
+    locked: 0
+  - name: Props
+    uniqueID: 3471516373
+    locked: 0
+  - name: Enemies
+    uniqueID: 148183673
+    locked: 0
+  - name: MainCharacter
+    uniqueID: 2025997845
+    locked: 0
